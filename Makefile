@@ -63,7 +63,7 @@ SRCS += $(wildcard $(LIBDIR)/src/*.c)
 SRCS += $(wildcard $(ARMDIR)/*.c)
 SRCS += $(STM_COMMON)/Libraries/CMSIS/ST/STM32F4xx/Source/Templates/TrueSTUDIO/startup_stm32f4xx.s
 SRCS_TEST_CPP = $(wildcard $(TESTDIR)/*.cpp)
-SRCS_TEST_C = $(wildcard $(LIBDIR)/src/*.c)
+SRCS_TEST_C = $(LIBDIR)/src/led_driver.c
 OBJS_TEST = $(patsubst $(LIBDIR)/src/%.c, $(BUILDDIR)/test/%.o, $(SRCS_TEST_C))
 
 
