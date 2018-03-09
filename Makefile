@@ -18,12 +18,12 @@ TESTDIR = test
 
 # ----- Compiler ----- #
 # General C-Flags
-CFLAGS_GEN = -Wall -Werror  
+CFLAGS_GEN = -Wall
 # ----- Target ----- #
 CC_TARGET = arm-none-eabi-gcc
 OBJCOPY_TARGET = arm-none-eabi-objcopy
 GDB_TARGET = arm-none-eabi-gdb
-CFLAGS_TARGET = $(CFLAGS_GEN)
+CFLAGS_TARGET = $(CFLAGS_GEN) -Werror  
 CFLAGS_TARGET += -Tstm32_flash.ld -mlittle-endian
 CFLAGS_TARGET += -mthumb -mcpu=cortex-m4 -mthumb-interwork
 CFLAGS_TARGET += -mfloat-abi=hard -mfpu=fpv4-sp-d16
@@ -47,15 +47,19 @@ CFLAGS_HOST += -I$(CPPUTEST_HOME)/include/CppUTestExt
 CFLAGS_HOST += -I$(LIBDIR)/$(INCDIR)
 CFLAGS_HOST += -I$(TESTDIR)
 CFLAGS_HOST += -I$(INCDIR)
-CFLAGS_HOST += -D TESTING
+CFLAGS_HOST += -isystem $(STM_COMMON)/Utilities/STM32F4-Discovery
+CFLAGS_HOST += -isystem $(STM_COMMON)/Libraries/CMSIS/Include
+CFLAGS_HOST += -isystem $(STM_COMMON)/Libraries/CMSIS/ST/STM32F4xx/Include
+CFLAGS_HOST += -isystem $(STM_COMMON)/Libraries/STM32F4xx_StdPeriph_Driver/inc
+CFLAGS_HOST += -D TESTING -D USE_STDPERIPH_DRIVER
 CPP_FLAGS_HOST = -Wno-c++14-compat
 CPPLIBS_HOST += -L$(CPPUTEST_HOME)/cpputest_build/lib -lCppUTest -lCppUTestExt
 # ----- End config ----- #
 
-vpath %.c $(SRCDIR):$(LIBDIR)/$(SRCDIR)
+# vpath %.c $(SRCDIR):$(LIBDIR)/$(SRCDIR)
 
 
-vpath %.o $(BUILDDIR)/test:$(BUILDDIR)/release:$(BUILDDIR)/debug
+# vpath %.o $(BUILDDIR)/test:$(BUILDDIR)/release:$(BUILDDIR)/debug
 	
 # ---- Source Files ----
 SRCS = $(wildcard $(SRCDIR)/*.c)
@@ -65,7 +69,8 @@ SRCS += $(STM_COMMON)/Libraries/CMSIS/ST/STM32F4xx/Source/Templates/TrueSTUDIO/s
 SRCS_TEST_CPP = $(wildcard $(TESTDIR)/*.cpp)
 SRCS_TEST_C = $(LIBDIR)/src/led_driver.c
 OBJS_TEST = $(patsubst $(LIBDIR)/src/%.c, $(BUILDDIR)/test/%.o, $(SRCS_TEST_C))
-
+#SRCS_TEST_ARM_C += $(SRCDIR)/system_stm32f4xx.c
+#OBJS_TEST_ARM += $(BUILDDIR)/test/system_stm32f4xx.o
 
 .PHONY: proj clean burn burn_release debug test run_test release
 
@@ -106,13 +111,13 @@ test: CPPC = $(CPPC_HOST)
 test: CFLAGS = $(CFLAGS_HOST)
 test: $(BUILDDIR)/test/$(PROJ_NAME)
 
-$(BUILDDIR)/test/$(PROJ_NAME): $(OBJS_TEST) $(SRCS_TEST_CPP) 
+$(OBJS_TEST): $(SRCS_TEST_C)
+	$(CC) $(CFLAGS) -c -o $(OBJS_TEST) $^
+
+$(BUILDDIR)/test/$(PROJ_NAME): $(OBJS_TEST_ARM) $(OBJS_TEST) $(SRCS_TEST_CPP) 
 	echo $^
 	$(CPPC) $(CFLAGS) $(CPP_FLAGS_HOST) $^ -o $@  $(CPPLIBS_HOST)
 	$(BUILDDIR)/test/$(PROJ_NAME)
-
-$(OBJS_TEST): $(SRCS_TEST_C)
-	$(CC) $(CFLAGS) -c -o $(OBJS_TEST) $^
 
 run_test:
 	$(BUILDDIR)/test/$(PROJ_NAME)

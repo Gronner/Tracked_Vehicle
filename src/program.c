@@ -1,8 +1,8 @@
 #include <stdint.h>
 #include "FreeRTOS.h"
 #include "task.h"
-#include "stm32f4xx_rcc.h"
 #include "stm32f4xx_gpio.h"
+#include "led_driver.h"
 
 int main(void);
 void vApplicationMallocFailedHook (void);
@@ -12,10 +12,7 @@ void Task1(void * pvParameters);
 void Task2(void * pvParameters);
 
 int main(void){
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
-    __asm("dsb");
-    GPIOD->MODER |= (1 << (GPIO_PinSource14 * 2));
-    GPIOD->MODER |= (1 << (GPIO_PinSource12 * 2));
+    led_init();
 
     create_tasks();
 
@@ -31,7 +28,7 @@ void create_tasks(void){
                 "Task1",
                 100,
                 NULL,
-                1,
+                2,
                 NULL);
     xTaskCreate(Task2,
                 "Task2",
