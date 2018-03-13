@@ -4,9 +4,9 @@
 #include "bsp.h"
 #include <stdio.h>
 
-static uint8_t led_status = 0b00000000;
+static uint8_t led_status;
 
-void led_init(void){
+uint8_t led_init(void){
     GPIO_InitTypeDef LED_Init_Def;
     LED_Init_Def.GPIO_Pin = LED_GREEN | LED_ORANGE | LED_RED | LED_BLUE;
     LED_Init_Def.GPIO_Mode = GPIO_Mode_OUT;
@@ -16,4 +16,9 @@ void led_init(void){
 
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
     GPIO_Init(LED_PORT, &LED_Init_Def);
+
+    GPIO_ResetBits(LED_PORT, LED_GREEN | LED_ORANGE | LED_RED | LED_BLUE);
+    led_status = 0;
+
+    return led_status;
 }

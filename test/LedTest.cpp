@@ -35,7 +35,7 @@ TEST_GROUP(LedDriverTestGroup){
 int gpio_is_equal(const void* object1, const void* object2){
     GPIO_InitTypeDef* init1 = (GPIO_InitTypeDef*) object1;
     GPIO_InitTypeDef* init2 = (GPIO_InitTypeDef*) object2;
-    printf("Init 1: %X\nInit 2: %X", init1->GPIO_Pin, init2->GPIO_Pin);
+
     if (init1->GPIO_Pin != init2->GPIO_Pin){
         return 0;
     }
@@ -54,8 +54,7 @@ int gpio_is_equal(const void* object1, const void* object2){
     return 1;
 }
 
-const char* gpio_to_string(const void* object)
-{
+const char* gpio_to_string(const void* object){
     char str[9];
     GPIO_InitTypeDef* init = (GPIO_InitTypeDef*) object;
     sprintf(str, "%X", init->GPIO_Pin);
@@ -74,12 +73,24 @@ void GPIO_Init(GPIO_TypeDef* Port, GPIO_InitTypeDef* Pin_Init_Struct){
                                   .withParameterOfType("GPIO_InitType", "Pin_Init_Struct", Pin_Init_Struct);
 }
 
+void GPIO_ResetBits(GPIO_TypeDef* Port, uint16_t GPIO_Pin){
+    mock().actualCall("GPIO_ResetBits").withParameter("Port", Port)
+                                  .withParameter("GPIO_Pin", GPIO_Pin);
+}
+
+
 TEST(LedDriverTestGroup, LedsInitProperly){
     mock_c()->installComparator("GPIO_InitType", gpio_is_equal, gpio_to_string);
     mock().expectOneCall("RCC_AHB1PeriphClockCmd").withParameter("HW_Clock", RCC_AHB1Periph_GPIOD)
                                                   .withParameter("STATE", ENABLE);
     mock().expectOneCall("GPIO_Init").withParameter("Port", LED_PORT)
                                      .withParameterOfType("GPIO_InitType", "Pin_Init_Struct", &LED_Init_Def);
-    led_init();
+
+    uint16_t all_leds = LED_GREEN | LED_ORANGE | LED_RED | LED_BLUE;
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LED_PORT)
+                                        .withParameter("GPIO_Pin", all_leds);
+    uint8_t led_status;
+    led_status = led_init();
     mock().checkExpectations();
+    CHECK_EQUAL(led_status, 0);
 }
