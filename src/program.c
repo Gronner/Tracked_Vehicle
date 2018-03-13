@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include "FreeRTOS.h"
 #include "task.h"
-#include "stm32f4xx_gpio.h"
+#include "bsp.h"
 #include "led_driver.h"
 
 int main(void);
@@ -44,8 +44,7 @@ void Task1(void * pvParameters){
     xLastWakeTime = xTaskGetTickCount();
 
     for(;;){
-        GPIOD->ODR ^= (1 << (GPIO_PinSource14));
-
+        led_turn_on(LED_GREEN);
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(250));
     }
 
@@ -59,8 +58,7 @@ void Task2(void* pvParameters){
     xLastWakeTime = xTaskGetTickCount();
 
     for(;;){
-        GPIOD->ODR ^= (1 << (GPIO_PinSource12));
-
+        led_turn_on(LED_RED);
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(250));
     }
 

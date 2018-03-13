@@ -2,9 +2,19 @@
 #include "stm32f4xx_gpio.h"
 #include "led_driver.h"
 #include "bsp.h"
-#include <stdio.h>
 
 static uint8_t led_status;
+
+static uint8_t led_get_bitmask(uint16_t led){
+    switch(led){
+        case LED_GREEN: return 1;
+        case LED_ORANGE: return (uint8_t) (1 << 1);
+        case LED_RED: return (uint8_t) (1 << 2);
+        case LED_BLUE: return (uint8_t) (1 << 3);
+        default: return UINT8_MAX;
+    }
+}
+                         
 
 uint8_t led_init(void){
     GPIO_InitTypeDef LED_Init_Def;
@@ -20,5 +30,11 @@ uint8_t led_init(void){
     GPIO_ResetBits(LED_PORT, LED_GREEN | LED_ORANGE | LED_RED | LED_BLUE);
     led_status = 0;
 
+    return led_status;
+}
+
+uint8_t led_turn_on(uint16_t led){
+    GPIO_SetBits(GPIOD, led);
+    led_status |= led_get_bitmask(led);
     return led_status;
 }

@@ -75,9 +75,13 @@ void GPIO_Init(GPIO_TypeDef* Port, GPIO_InitTypeDef* Pin_Init_Struct){
 
 void GPIO_ResetBits(GPIO_TypeDef* Port, uint16_t GPIO_Pin){
     mock().actualCall("GPIO_ResetBits").withParameter("Port", Port)
-                                  .withParameter("GPIO_Pin", GPIO_Pin);
+                                       .withParameter("GPIO_Pin", GPIO_Pin);
 }
 
+void GPIO_SetBits(GPIO_TypeDef* Port, uint16_t GPIO_Pin){
+    mock().actualCall("GPIO_SetBits").withParameter("Port", Port)
+                                     .withParameter("GPIO_Pin", GPIO_Pin);
+}
 
 TEST(LedDriverTestGroup, LedsInitProperly){
     mock_c()->installComparator("GPIO_InitType", gpio_is_equal, gpio_to_string);
@@ -92,5 +96,27 @@ TEST(LedDriverTestGroup, LedsInitProperly){
     uint8_t led_status;
     led_status = led_init();
     mock().checkExpectations();
-    CHECK_EQUAL(led_status, 0);
+    CHECK_EQUAL(0, led_status);
+}
+
+TEST(LedDriverTestGroup, LedTurnOnOneLed){
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", LED_PORT)
+                                        .withParameter("GPIO_Pin", LED_GREEN);
+    uint8_t led_status;
+    led_status = led_turn_on(LED_GREEN);
+    mock().checkExpectations();
+    CHECK(0b00000001 & led_status);
+}
+
+TEST(LedDriverTestGroup, LedTurnOnTwoLeds){
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", LED_PORT)
+                                        .withParameter("GPIO_Pin", LED_GREEN);
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", LED_PORT)
+                                        .withParameter("GPIO_Pin", LED_BLUE);
+    uint8_t led_status;
+    led_status = led_turn_on(LED_GREEN);
+    CHECK(0b00000001 & led_status);
+    led_status = led_turn_on(LED_BLUE);
+    mock().checkExpectations();
+    CHECK(0b00001001 & led_status);
 }
