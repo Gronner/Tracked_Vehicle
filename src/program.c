@@ -42,16 +42,9 @@ void Task1(void * pvParameters){
     TickType_t xLastWakeTime;
 
     xLastWakeTime = xTaskGetTickCount();
-    uint8_t check = 1;
     for(;;){
-        if (check){
-            led_turn_on(LED_GREEN);
-            check = 0;
-        }
-        else{
-            led_turn_off(LED_GREEN);
-            check = 1;
-        }
+        led_toggle(LED_GREEN);
+
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(250));
     }
 
@@ -63,17 +56,10 @@ void Task2(void* pvParameters){
     TickType_t xLastWakeTime;
 
     xLastWakeTime = xTaskGetTickCount();
-    uint8_t check = 1;
 
     for(;;){
-        if(check){
-            led_turn_on(LED_RED);
-            check = 0;
-        }
-        else{
-            led_turn_off(LED_RED);
-            check = 1;
-        }
+        led_toggle(LED_RED);
+
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(250));
     }
 

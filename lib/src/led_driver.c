@@ -14,7 +14,6 @@ static uint8_t led_get_bitmask(uint16_t led){
         default: return UINT8_MAX;
     }
 }
-                         
 
 uint8_t led_init(void){
     GPIO_InitTypeDef LED_Init_Def;
@@ -44,3 +43,18 @@ uint8_t led_turn_off(uint16_t led){
     led_status &= ~(led_get_bitmask(led));
     return led_status;
 }
+
+uint8_t led_toggle(uint16_t led){
+    uint8_t led_bitmask;
+    led_bitmask = led_get_bitmask(led);
+    if((led_status & led_bitmask) == 0){
+        GPIO_SetBits(GPIOD, led);
+        led_status |= led_bitmask;
+    }
+    else{
+        GPIO_ResetBits(GPIOD, led);
+        led_status &= ~(led_bitmask);
+    }
+    return led_status;
+}
+
