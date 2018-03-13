@@ -120,3 +120,72 @@ TEST(LedDriverTestGroup, LedTurnOnTwoLeds){
     mock().checkExpectations();
     CHECK(0b00001001 & led_status);
 }
+
+TEST(LedDriverTestGroup, LedTurnOnTwice){
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", LED_PORT)
+                                        .withParameter("GPIO_Pin", LED_GREEN);
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", LED_PORT)
+                                        .withParameter("GPIO_Pin", LED_GREEN);
+    uint8_t led_status;
+    led_status = led_turn_on(LED_GREEN);
+    CHECK(0b00000001 & led_status);
+    led_status = led_turn_on(LED_GREEN);
+    CHECK(0b00000001 & led_status);
+    mock().checkExpectations();
+}
+
+TEST(LedDriverTestGroup, LedTurnOffOneLed){
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", LED_PORT)
+                                        .withParameter("GPIO_Pin", LED_GREEN);
+    uint8_t led_status;
+    led_status = led_turn_on(LED_GREEN);
+    CHECK(0b00000001 & led_status);
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LED_PORT)
+                                          .withParameter("GPIO_Pin", LED_GREEN);
+    led_status = led_turn_off(LED_GREEN);
+    CHECK((0b00000001 & led_status) == 0);
+    mock().checkExpectations();
+}
+
+TEST(LedDriverTestGroup, LedTurnOffTwoLeds){
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", LED_PORT)
+                                        .withParameter("GPIO_Pin", LED_GREEN);
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", LED_PORT)
+                                        .withParameter("GPIO_Pin", LED_BLUE);
+    uint8_t led_status;
+    led_status = led_turn_on(LED_GREEN);
+    CHECK(0b00000001 & led_status);
+    led_status = led_turn_on(LED_BLUE);
+    CHECK(0b00001001 & led_status);
+
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LED_PORT)
+                                          .withParameter("GPIO_Pin", LED_GREEN);
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LED_PORT)
+                                          .withParameter("GPIO_Pin", LED_BLUE);
+    led_status = led_turn_off(LED_BLUE);
+    CHECK((0b00001000 & led_status) == 0);
+    CHECK(0b00000001 & led_status);         //Check if LED_GREEN still on
+    led_status = led_turn_off(LED_GREEN);
+    CHECK((0b00000001 & led_status) == 0);
+
+    mock().checkExpectations();
+}
+
+TEST(LedDriverTestGroup, LedTurnOffTwice){
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", LED_PORT)
+                                        .withParameter("GPIO_Pin", LED_GREEN);
+    uint8_t led_status;
+    led_status = led_turn_on(LED_GREEN);
+    CHECK(0b00000001 & led_status);
+
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LED_PORT)
+                                          .withParameter("GPIO_Pin", LED_GREEN);
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LED_PORT)
+                                          .withParameter("GPIO_Pin", LED_GREEN);
+    led_status = led_turn_off(LED_GREEN);
+    CHECK((0b00000001 & led_status) == 0);
+    led_status = led_turn_off(LED_GREEN);
+    CHECK((0b00000001 & led_status) == 0);
+    mock().checkExpectations();
+}
+

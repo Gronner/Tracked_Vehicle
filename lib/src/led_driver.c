@@ -38,3 +38,9 @@ uint8_t led_turn_on(uint16_t led){
     led_status |= led_get_bitmask(led);
     return led_status;
 }
+
+uint8_t led_turn_off(uint16_t led){
+    GPIO_ResetBits(GPIOD, led);
+    led_status &= ~(led_get_bitmask(led));
+    return led_status;
+}
