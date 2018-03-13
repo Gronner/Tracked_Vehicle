@@ -58,3 +58,14 @@ uint8_t led_toggle(uint16_t led){
     return led_status;
 }
 
+uint8_t led_turn_on_all (void){
+    GPIO_SetBits(GPIOD, LED_GREEN | LED_ORANGE | LED_RED | LED_BLUE);
+    led_status ^= 0b00001111;
+    return led_status;
+}
+
+uint8_t led_turn_off_all(void){
+    GPIO_ResetBits(GPIOD, LED_GREEN | LED_ORANGE | LED_RED | LED_BLUE);
+    led_status &= ~(0b00001111);
+    return led_status;
+}
