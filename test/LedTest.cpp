@@ -16,6 +16,9 @@ GPIO_InitTypeDef LED_Init_Def;
 TEST_GROUP(LedDriverTestGroup){
 
     void setup(void){
+        // Turn off memory leak detection:
+        MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
+
         LED_Init_Def.GPIO_Pin = LED_GREEN | LED_ORANGE | LED_RED | LED_BLUE;
         LED_Init_Def.GPIO_Mode = GPIO_Mode_OUT;
         LED_Init_Def.GPIO_OType = GPIO_OType_PP;
@@ -25,13 +28,14 @@ TEST_GROUP(LedDriverTestGroup){
 
     void teardown(void){
         mock().clear();
+        MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
     }
 };
 
 int gpio_is_equal(const void* object1, const void* object2){
     GPIO_InitTypeDef* init1 = (GPIO_InitTypeDef*) object1;
     GPIO_InitTypeDef* init2 = (GPIO_InitTypeDef*) object2;
-
+    printf("Init 1: %X\nInit 2: %X", init1->GPIO_Pin, init2->GPIO_Pin);
     if (init1->GPIO_Pin != init2->GPIO_Pin){
         return 0;
     }
@@ -67,7 +71,7 @@ void RCC_AHB1PeriphClockCmd(uint32_t HW_Clock, FunctionalState State){
 
 void GPIO_Init(GPIO_TypeDef* Port, GPIO_InitTypeDef* Pin_Init_Struct){
     mock().actualCall("GPIO_Init").withParameter("Port", LED_PORT)
-                                  .withParameterOfType("GPIO_InitType", "Pin_Init_Struct", &Pin_Init_Struct);
+                                  .withParameterOfType("GPIO_InitType", "Pin_Init_Struct", Pin_Init_Struct);
 }
 
 TEST(LedDriverTestGroup, LedsInitProperly){

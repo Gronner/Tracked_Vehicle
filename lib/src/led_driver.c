@@ -4,6 +4,7 @@
 #include "bsp.h"
 #include <stdio.h>
 
+static uint8_t led_status = 0b00000000;
 
 void led_init(void){
     GPIO_InitTypeDef LED_Init_Def;
