@@ -112,12 +112,11 @@ test: CFLAGS = $(CFLAGS_HOST)
 test: $(BUILDDIR)/test/$(PROJ_NAME)
 
 $(OBJS_TEST): $(SRCS_TEST_C)
-	$(CC) $(CFLAGS) -c -o $(OBJS_TEST) $^
+	@$(CC) $(CFLAGS) -c -o $(OBJS_TEST) $^
 
 $(BUILDDIR)/test/$(PROJ_NAME): $(OBJS_TEST_ARM) $(OBJS_TEST) $(SRCS_TEST_CPP) 
-	echo $^
-	$(CPPC) $(CFLAGS) $(CPP_FLAGS_HOST) $^ -o $@  $(CPPLIBS_HOST)
-	$(BUILDDIR)/test/$(PROJ_NAME)
+	@$(CPPC) $(CFLAGS) $(CPP_FLAGS_HOST) $^ -o $@  $(CPPLIBS_HOST)
+	@$(BUILDDIR)/test/$(PROJ_NAME)
 
 run_test:
 	$(BUILDDIR)/test/$(PROJ_NAME)

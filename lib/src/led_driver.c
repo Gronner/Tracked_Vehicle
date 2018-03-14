@@ -3,7 +3,7 @@
 #include "led_driver.h"
 #include "bsp.h"
 
-static uint8_t led_status;
+static uint8_t led_state;
 
 static uint8_t led_get_bitmask(uint16_t led){
     switch(led){
@@ -27,45 +27,49 @@ uint8_t led_init(void){
     GPIO_Init(LED_PORT, &LED_Init_Def);
 
     GPIO_ResetBits(LED_PORT, LED_GREEN | LED_ORANGE | LED_RED | LED_BLUE);
-    led_status = 0;
+    led_state = 0;
 
-    return led_status;
+    return led_state;
 }
 
 uint8_t led_turn_on(uint16_t led){
     GPIO_SetBits(GPIOD, led);
-    led_status |= led_get_bitmask(led);
-    return led_status;
+    led_state |= led_get_bitmask(led);
+    return led_state;
 }
 
 uint8_t led_turn_off(uint16_t led){
     GPIO_ResetBits(GPIOD, led);
-    led_status &= ~(led_get_bitmask(led));
-    return led_status;
+    led_state &= ~(led_get_bitmask(led));
+    return led_state;
 }
 
 uint8_t led_toggle(uint16_t led){
     uint8_t led_bitmask;
     led_bitmask = led_get_bitmask(led);
-    if((led_status & led_bitmask) == 0){
+    if((led_state & led_bitmask) == 0){
         GPIO_SetBits(GPIOD, led);
-        led_status |= led_bitmask;
+        led_state |= led_bitmask;
     }
     else{
         GPIO_ResetBits(GPIOD, led);
-        led_status &= ~(led_bitmask);
+        led_state &= ~(led_bitmask);
     }
-    return led_status;
+    return led_state;
 }
 
 uint8_t led_turn_on_all (void){
     GPIO_SetBits(GPIOD, LED_GREEN | LED_ORANGE | LED_RED | LED_BLUE);
-    led_status ^= 0b00001111;
-    return led_status;
+    led_state ^= 0b00001111;
+    return led_state;
 }
 
 uint8_t led_turn_off_all(void){
     GPIO_ResetBits(GPIOD, LED_GREEN | LED_ORANGE | LED_RED | LED_BLUE);
-    led_status &= ~(0b00001111);
-    return led_status;
+    led_state &= ~(0b00001111);
+    return led_state;
+}
+
+uint8_t led_get_state(void){
+    return led_state;
 }
