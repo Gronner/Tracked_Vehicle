@@ -67,7 +67,7 @@ SRCS += $(wildcard $(LIBDIR)/src/*.c)
 SRCS += $(wildcard $(ARMDIR)/*.c)
 SRCS += $(STM_COMMON)/Libraries/CMSIS/ST/STM32F4xx/Source/Templates/TrueSTUDIO/startup_stm32f4xx.s
 SRCS_TEST_CPP = $(wildcard $(TESTDIR)/*.cpp)
-SRCS_TEST_C = $(LIBDIR)/src/led_driver.c
+SRCS_TEST_C = $(LIBDIR)/src/led_driver.c $(LIBDIR)/src/pwd_driver.c
 OBJS_TEST = $(patsubst $(LIBDIR)/src/%.c, $(BUILDDIR)/test/%.o, $(SRCS_TEST_C))
 #SRCS_TEST_ARM_C += $(SRCDIR)/system_stm32f4xx.c
 #OBJS_TEST_ARM += $(BUILDDIR)/test/system_stm32f4xx.o
@@ -112,7 +112,8 @@ test: CFLAGS = $(CFLAGS_HOST)
 test: $(BUILDDIR)/test/$(PROJ_NAME)
 
 $(OBJS_TEST): $(SRCS_TEST_C)
-	@$(CC) $(CFLAGS) -c -o $(OBJS_TEST) $^
+	$(foreach src_file, $(SRCS_TEST_C), $(CC) $(CFLAGS) -c $(src_file) -o $(patsubst $(LIBDIR)/src/%.c, $(BUILDDIR)/test/%.o, $(src_file));)
+	# $(CC) $(CFLAGS) -c $^ -o $@
 
 $(BUILDDIR)/test/$(PROJ_NAME): $(OBJS_TEST_ARM) $(OBJS_TEST) $(SRCS_TEST_CPP) 
 	@$(CPPC) $(CFLAGS) $(CPP_FLAGS_HOST) $^ -o $@  $(CPPLIBS_HOST)
