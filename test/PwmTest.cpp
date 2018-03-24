@@ -6,7 +6,7 @@ extern "C"{
     #include "stm32f4xx_conf.h"
     #include "stm32f4xx_rcc.h"
     #include "bsp.h"
-    #include "pwd_driver.h"
+    #include "pwm_driver.h"
 }
 
 #include "test_rcc_mock.h"
@@ -19,6 +19,7 @@ GPIO_InitTypeDef PWM_Init_Def;
 
 TEST_GROUP(PwdDriverTestGroup){
     void setup(void){
+        MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
         // Setup TIM 2
         TIM2_Init_Def.TIM_Prescaler = PWM_PRESCALER;
         TIM2_Init_Def.TIM_CounterMode = TIM_CounterMode_Up; // Count up
@@ -34,9 +35,13 @@ TEST_GROUP(PwdDriverTestGroup){
         PWM_Init_Def.GPIO_Pin = PWM_RIGHT | PWM_LEFT;
         PWM_Init_Def.GPIO_Mode = GPIO_Mode_AF;
         PWM_Init_Def.GPIO_Speed = GPIO_Speed_50MHz;
+        PWM_Init_Def.GPIO_OType = GPIO_OType_PP;
+        PWM_Init_Def.GPIO_PuPd = GPIO_PuPd_NOPULL;
     }
 
     void teardown(void){
+        mock().clear();
+        MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
     }
 };
 
@@ -64,6 +69,12 @@ TEST(PwdDriverTestGroup, PWMInitProperly){
     mock().expectOneCall("TIM_Cmd").withParameter("Timer", PWM_TIMER)
                                    .withParameter("STATE", ENABLE);
     // Check for PWM
+    mock().expectOneCall("TIM_OC2Init").withParameter("Timer", PWM_TIMER)
+                                       .withParameterOfType("TIM_CH_InitType",
+                                                            "TIM_CH_Init_Struct",
+                                                            &TIM2_CH_Init_Def);
+    mock().expectOneCall("TIM_OC2PreloadConfig").withParameter("Timer", PWM_TIMER)
+                                                .withParameter("State", TIM_OCPreload_Enable);
     mock().expectOneCall("TIM_OC1Init").withParameter("Timer", PWM_TIMER)
                                        .withParameterOfType("TIM_CH_InitType",
                                                             "TIM_CH_Init_Struct",
@@ -72,9 +83,12 @@ TEST(PwdDriverTestGroup, PWMInitProperly){
                                                 .withParameter("State", TIM_OCPreload_Enable);
     // Check for GPIO
     mock().expectOneCall("GPIO_PinAFConfig").withParameter("Port", PWM_PORT)
-                                            .withParameter("Pins", PWM_RIGHT | PWM_LEFT)
+                                            .withParameter("Pins", PWM_RIGHT_SRC)
                                             .withParameter("AF_Sel", PWM_PIN_AF);
-    mock().expectOneCall("GPIO_Init").withParameter("Port", LED_PORT)
+    mock().expectOneCall("GPIO_PinAFConfig").withParameter("Port", PWM_PORT)
+                                            .withParameter("Pins", PWM_LEFT_SRC)
+                                            .withParameter("AF_Sel", PWM_PIN_AF);
+    mock().expectOneCall("GPIO_Init").withParameter("Port", PWM_PORT)
                                      .withParameterOfType("GPIO_InitType",
                                                           "Pin_Init_Struct",
                                                           &PWM_Init_Def);

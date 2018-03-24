@@ -89,3 +89,15 @@ void TIM_OC1PreloadConfig(TIM_TypeDef* TIMx, uint16_t TIM_OCPreload){
     mock().actualCall("TIM_OC1PreloadConfig").withParameter("Timer", TIMx)
                                              .withParameter("State", TIM_OCPreload);
 }
+
+void TIM_OC2Init(TIM_TypeDef* TIMx, TIM_OCInitTypeDef* TIM_OCInitStruct){
+    mock().actualCall("TIM_OC2Init").withParameter("Timer", TIMx)
+                                    .withParameterOfType("TIM_CH_InitType",
+                                                         "TIM_CH_Init_Struct",
+                                                         TIM_OCInitStruct);
+}
+
+void TIM_OC2PreloadConfig(TIM_TypeDef* TIMx, uint16_t TIM_OCPreload){
+    mock().actualCall("TIM_OC2PreloadConfig").withParameter("Timer", TIMx)
+                                             .withParameter("State", TIM_OCPreload);
+}
