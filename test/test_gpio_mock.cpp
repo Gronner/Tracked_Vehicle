@@ -53,3 +53,9 @@ void GPIO_SetBits(GPIO_TypeDef* Port, uint16_t GPIO_Pin){
     mock().actualCall("GPIO_SetBits").withParameter("Port", Port)
                                      .withParameter("GPIO_Pin", GPIO_Pin);
 }
+
+void GPIO_PinAFConfig(GPIO_TypeDef* GPIOx, uint16_t GPIO_PinSource, uint8_t GPIO_AF){
+    mock().actualCall("GPIO_PinAFConfig").withParameter("Port", GPIOx)
+                                         .withParameter("Pins", GPIO_PinSource) 
+                                         .withParameter("AF_Sel", GPIO_AF);
+}
