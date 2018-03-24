@@ -78,6 +78,6 @@ TEST(PwdDriverTestGroup, PWMInitProperly){
                                      .withParameterOfType("GPIO_InitType",
                                                           "Pin_Init_Struct",
                                                           &PWM_Init_Def);
-    //pwm_init();
+    pwm_init();
     mock().checkExpectations();
 }
