@@ -112,7 +112,7 @@ test: CFLAGS = $(CFLAGS_HOST)
 test: $(BUILDDIR)/test/$(PROJ_NAME)
 
 $(OBJS_TEST): $(SRCS_TEST_C)
-	$(foreach src_file, $(SRCS_TEST_C), $(CC) $(CFLAGS) -c $(src_file) -o $(patsubst $(LIBDIR)/src/%.c, $(BUILDDIR)/test/%.o, $(src_file));)
+	@$(foreach src_file, $(SRCS_TEST_C), $(CC) $(CFLAGS) -c $(src_file) -o $(patsubst $(LIBDIR)/src/%.c, $(BUILDDIR)/test/%.o, $(src_file));)
 	# $(CC) $(CFLAGS) -c $^ -o $@
 
 $(BUILDDIR)/test/$(PROJ_NAME): $(OBJS_TEST_ARM) $(OBJS_TEST) $(SRCS_TEST_CPP) 
