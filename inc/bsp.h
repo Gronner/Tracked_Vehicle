@@ -13,12 +13,14 @@
 // PWM
 #define PWM_PORT GPIOA
 #define PWM_RIGHT GPIO_Pin_1
+#define PWM_RIGHT_SRC GPIO_PinSource1
 #define PWM_LEFT GPIO_Pin_15
+#define PWM_LEFT_SRC GPIO_PinSource15
 #define PWM_TIMER TIM2
 #define PWM_PIN_AF GPIO_AF_TIM2
-#define PWM_PRESCALER 40000
-#define PWM_PERIOD 500
+#define PWM_PRESCALER 0
+#define PWM_PERIOD 8399
 #define PWM_CLK_DIV TIM_CKD_DIV1
-#define PWM_START_PULSE 0
+#define PWM_START_PULSE 4199 // TODO: Change to 0 later on!
 
 #endif // __BSP_H_
