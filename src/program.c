@@ -37,25 +37,16 @@ void create_tasks(void){
 
 void Task1(void * pvParameters){
     TickType_t xLastWakeTime;
-    uint8_t counter = 1;
+    uint16_t duty_cycle_left = pwm_get_duty_cycle(PWM_LEFT);
+    uint16_t duty_cycle_right = pwm_get_duty_cycle(PWM_RIGHT);
 
     xLastWakeTime = xTaskGetTickCount();
     led_turn_on(LED_GREEN);
     for(;;){
-        led_toggle(LED_GREEN);
-        counter++;
-        if(counter==4){
-            led_turn_on(LED_RED);
-            pwm_set_duty_cycle(PWM_RIGHT, 0);
-        }
-        if(counter==5){
-            led_turn_on(LED_ORANGE);
-            pwm_set_duty_cycle(PWM_RIGHT, 25);
-        }
-        if(counter==6){
-            led_turn_on(LED_BLUE);
-            pwm_set_duty_cycle(PWM_LEFT, 75);
-        }
+        pwm_set_duty_cycle(PWM_LEFT, duty_cycle_left+20);
+        pwm_set_duty_cycle(PWM_RIGHT, duty_cycle_right+10);
+        duty_cycle_left = pwm_get_duty_cycle(PWM_LEFT);
+        duty_cycle_right = pwm_get_duty_cycle(PWM_RIGHT);
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(250));
     }
 

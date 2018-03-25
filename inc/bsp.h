@@ -21,6 +21,6 @@
 #define PWM_PRESCALER 0
 #define PWM_PERIOD 8399
 #define PWM_CLK_DIV TIM_CKD_DIV1
-#define PWM_START_PULSE 4199 // TODO: Change to 0 later on!
+#define PWM_START_PULSE 0
 
 #endif // __BSP_H_
