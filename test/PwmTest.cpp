@@ -109,3 +109,31 @@ TEST(PwmDriverTestGroup, PWMStart){
     pwm_start();
     mock().checkExpectations();
 }
+
+TEST(PwmDriverTestGroup, PWMSetPulseWidthRightZero){
+    mock().expectOneCall("TIM_SetCompare2").withParameter("Timer", PWM_TIMER)
+                                           .withParameter("CCR", 0);
+    pwm_set_duty_cycle(PWM_RIGHT, 0);
+    mock().checkExpectations();
+}
+
+TEST(PwmDriverTestGroup, PWMSetPulseWidthRight100){
+    mock().expectOneCall("TIM_SetCompare2").withParameter("Timer", PWM_TIMER)
+                                           .withParameter("CCR", PWM_PERIOD);
+    pwm_set_duty_cycle(PWM_RIGHT, 100);
+    mock().checkExpectations();
+}
+
+TEST(PwmDriverTestGroup, PWMSetPulseWidthRightAny){
+    mock().expectOneCall("TIM_SetCompare2").withParameter("Timer", PWM_TIMER)
+                                           .withParameter("CCR", 2519);
+    pwm_set_duty_cycle(PWM_RIGHT, 30);
+    mock().checkExpectations();
+}
+
+TEST(PwmDriverTestGroup, PWMSetPulseWidthLeftZero){
+    mock().expectOneCall("TIM_SetCompare1").withParameter("Timer", PWM_TIMER)
+                                           .withParameter("CCR", 0);
+    pwm_set_duty_cycle(PWM_LEFT, 0);
+    mock().checkExpectations();
+}

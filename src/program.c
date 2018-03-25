@@ -46,11 +46,15 @@ void Task1(void * pvParameters){
         counter++;
         if(counter==4){
             led_turn_on(LED_RED);
-            pwm_stop();
+            pwm_set_duty_cycle(PWM_RIGHT, 0);
         }
-        if(counter==8){
-            pwm_start();
-            counter = 1;
+        if(counter==5){
+            led_turn_on(LED_ORANGE);
+            pwm_set_duty_cycle(PWM_RIGHT, 25);
+        }
+        if(counter==6){
+            led_turn_on(LED_BLUE);
+            pwm_set_duty_cycle(PWM_LEFT, 75);
         }
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(250));
     }

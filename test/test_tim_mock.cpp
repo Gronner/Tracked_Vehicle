@@ -101,3 +101,13 @@ void TIM_OC2PreloadConfig(TIM_TypeDef* TIMx, uint16_t TIM_OCPreload){
     mock().actualCall("TIM_OC2PreloadConfig").withParameter("Timer", TIMx)
                                              .withParameter("State", TIM_OCPreload);
 }
+
+void TIM_SetCompare1(TIM_TypeDef* TIMx, uint32_t Compare){
+    mock().actualCall("TIM_SetCompare1").withParameter("Timer", TIMx)
+                                        .withParameter("CCR", Compare);
+}
+
+void TIM_SetCompare2(TIM_TypeDef* TIMx, uint32_t Compare){
+    mock().actualCall("TIM_SetCompare2").withParameter("Timer", TIMx)
+                                        .withParameter("CCR", Compare);
+}

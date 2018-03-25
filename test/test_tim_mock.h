@@ -16,5 +16,7 @@ void TIM_OC2Init(TIM_TypeDef* TIMx, TIM_OCInitTypeDef* TIM_OCInitStruct);
 void TIM_OC1Init(TIM_TypeDef* TIMx, TIM_OCInitTypeDef* TIM_OCInitStruct);
 void TIM_OC1PreloadConfig(TIM_TypeDef* TIMx, uint16_t TIM_OCPreload);
 void TIM_OC2PreloadConfig(TIM_TypeDef* TIMx, uint16_t TIM_OCPreload);
+void TIM_SetCompare1(TIM_TypeDef* TIMx, uint32_t Compare);
+void TIM_SetCompare2(TIM_TypeDef* TIMx, uint32_t Compare);
 #endif // __TEST_TIM_MOCK_H_
 

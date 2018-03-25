@@ -57,3 +57,34 @@ void pwm_stop(void){
 void pwm_start(void){
     TIM_Cmd(PWM_TIMER, ENABLE);
 }
+
+static uint32_t duty_cycle_to_pulse_witdh(uint16_t duty_cycle){
+    uint32_t t_pulse;
+    if(duty_cycle == 0){
+        return 0;
+    }
+    if(duty_cycle == 100){
+        return PWM_PERIOD;
+    }
+    t_pulse = ((PWM_PERIOD + 1) * duty_cycle)/(100) - 1; 
+    return t_pulse;
+}
+
+static void (*get_set_CCR_function(uint16_t pwm_channel))(TIM_TypeDef*, uint32_t){
+    switch(pwm_channel){
+        case PWM_RIGHT: return TIM_SetCompare2;
+        case PWM_LEFT: return TIM_SetCompare1;
+        default: return 0;
+    }
+}
+
+void pwm_set_duty_cycle(uint16_t pwm_channel, uint16_t duty_cycle){
+    uint32_t t_pulse;
+    void (*set_CCR_function)(TIM_TypeDef*, uint32_t);
+    set_CCR_function = get_set_CCR_function(pwm_channel);
+    if(set_CCR_function == 0){
+        return;
+    }
+    t_pulse = duty_cycle_to_pulse_witdh(duty_cycle);
+    set_CCR_function(PWM_TIMER, t_pulse);
+}
