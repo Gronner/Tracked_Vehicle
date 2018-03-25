@@ -4,6 +4,8 @@
 #include "pwm_driver.h"
 #include "led_driver.h"
 
+static uint8_t duty_cycles[2] = {0, 0};
+
 void pwm_init(void){
     // Activate clocks
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE); // PWM timer clock
@@ -78,7 +80,10 @@ static void (*get_set_CCR_function(uint16_t pwm_channel))(TIM_TypeDef*, uint32_t
     }
 }
 
-void pwm_set_duty_cycle(uint16_t pwm_channel, uint16_t duty_cycle){
+void pwm_set_duty_cycle(uint16_t pwm_channel, uint8_t duty_cycle){
+    if(duty_cycle >= 101){  //101 because 100 does not perfectly generate 100% duty cycles
+        duty_cycle = 101; 
+    }
     uint32_t t_pulse;
     void (*set_CCR_function)(TIM_TypeDef*, uint32_t);
     set_CCR_function = get_set_CCR_function(pwm_channel);
@@ -87,4 +92,19 @@ void pwm_set_duty_cycle(uint16_t pwm_channel, uint16_t duty_cycle){
     }
     t_pulse = duty_cycle_to_pulse_witdh(duty_cycle);
     set_CCR_function(PWM_TIMER, t_pulse);
+    switch(pwm_channel){
+        case PWM_RIGHT: duty_cycles[0] = duty_cycle;
+                        break;
+        case PWM_LEFT: duty_cycles[1] = duty_cycle;
+                       break;
+        default: break;
+    }
+}
+
+uint8_t pwm_get_duty_cycle(uint16_t pwm_channel){
+    switch(pwm_channel){
+        case PWM_RIGHT: return duty_cycles[0];
+        case PWM_LEFT: return duty_cycles[1];
+        default: return UINT8_MAX;
+    }
 }
