@@ -102,3 +102,10 @@ TEST(PwmDriverTestGroup, PWMStop){
     pwm_stop();
     mock().checkExpectations();
 }
+
+TEST(PwmDriverTestGroup, PWMStart){
+    mock().expectOneCall("TIM_Cmd").withParameter("Timer", PWM_TIMER)
+                                   .withParameter("STATE", ENABLE);
+    pwm_start();
+    mock().checkExpectations();
+}

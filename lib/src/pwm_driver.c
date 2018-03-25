@@ -53,3 +53,7 @@ void pwm_init(void){
 void pwm_stop(void){
     TIM_Cmd(PWM_TIMER, DISABLE);
 }
+
+void pwm_start(void){
+    TIM_Cmd(PWM_TIMER, ENABLE);
+}
