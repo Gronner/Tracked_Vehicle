@@ -17,7 +17,7 @@ TIM_TimeBaseInitTypeDef TIM2_Init_Def;
 TIM_OCInitTypeDef TIM2_CH_Init_Def;
 GPIO_InitTypeDef PWM_Init_Def;
 
-TEST_GROUP(PwdDriverTestGroup){
+TEST_GROUP(PwmDriverTestGroup){
     void setup(void){
         MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
         // Setup TIM 2
@@ -51,7 +51,7 @@ TEST_GROUP(PwdDriverTestGroup){
  * Call PWM Init twice with proper settings
  * Call GPIO Init with proper settings
  */
-TEST(PwdDriverTestGroup, PWMInitProperly){
+TEST(PwmDriverTestGroup, PWMInitProperly){
     mock_c()->installComparator("GPIO_InitType", gpio_is_equal, gpio_to_string);
     mock_c()->installComparator("TIM_InitType", tim_is_equal, tim_to_string);
     mock_c()->installComparator("TIM_CH_InitType", tim_oc_is_equal, tim_oc_to_string);
@@ -93,5 +93,12 @@ TEST(PwdDriverTestGroup, PWMInitProperly){
                                                           "Pin_Init_Struct",
                                                           &PWM_Init_Def);
     pwm_init();
+    mock().checkExpectations();
+}
+
+TEST(PwmDriverTestGroup, PWMStop){
+    mock().expectOneCall("TIM_Cmd").withParameter("Timer", PWM_TIMER)
+                                   .withParameter("STATE", DISABLE);
+    pwm_stop();
     mock().checkExpectations();
 }

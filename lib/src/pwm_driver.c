@@ -48,3 +48,8 @@ void pwm_init(void){
 
     GPIO_Init(PWM_PORT, &PWM_Init_Def);
 }
+
+
+void pwm_stop(void){
+    TIM_Cmd(PWM_TIMER, DISABLE);
+}

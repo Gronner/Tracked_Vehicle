@@ -37,11 +37,17 @@ void create_tasks(void){
 
 void Task1(void * pvParameters){
     TickType_t xLastWakeTime;
+    uint8_t counter = 0;
 
     xLastWakeTime = xTaskGetTickCount();
     led_turn_on(LED_GREEN);
     for(;;){
         led_toggle(LED_GREEN);
+        counter++;
+        if(counter==4){
+            led_turn_on(LED_RED);
+            pwm_stop();
+        }
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(250));
     }
 
