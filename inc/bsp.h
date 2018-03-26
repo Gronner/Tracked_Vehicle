@@ -23,4 +23,14 @@
 #define PWM_CLK_DIV TIM_CKD_DIV1
 #define PWM_START_PULSE 0
 
+// I2C
+#define I2C_BUS I2C1
+#define I2C_PORT GPIOB
+#define I2C_SCL GPIO_Pin_6
+#define I2C_SCL_SRC GPIO_PinSource6
+#define I2C_SDA GPIO_Pin_9
+#define I2C_SDA_SRC GPIO_PinSource9
+#define I2C_CLOCK_SPEED 400000
+#define I2C_OWN_ADRESS 0x2
+
 #endif // __BSP_H_
