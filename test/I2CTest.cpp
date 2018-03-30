@@ -27,14 +27,14 @@ TEST_GROUP(I2CDriverTestGroup){
         I2C_Pin_Init_Def.GPIO_Pin = I2C_SCL | I2C_SDA;
         I2C_Pin_Init_Def.GPIO_Mode = GPIO_Mode_AF;
         I2C_Pin_Init_Def.GPIO_Speed = GPIO_Speed_50MHz;
-        I2C_Pin_Init_Def.GPIO_OType = GPIO_OType_OD;
-        I2C_Pin_Init_Def.GPIO_PuPd = GPIO_PuPd_NOPULL;
+        I2C_Pin_Init_Def.GPIO_OType = GPIO_OType_PP;
+        I2C_Pin_Init_Def.GPIO_PuPd = GPIO_PuPd_DOWN;
 
         // I2C setup
         I2C_Init_Def.I2C_ClockSpeed = I2C_CLOCK_SPEED;
         I2C_Init_Def.I2C_Mode = I2C_Mode_I2C;
-        I2C_Init_Def.I2C_DutyCycle = I2C_DutyCycle_16_9;
-        I2C_Init_Def.I2C_OwnAddress1 = I2C_OWN_ADRESS;
+        I2C_Init_Def.I2C_DutyCycle = I2C_DutyCycle_2;
+        I2C_Init_Def.I2C_OwnAddress1 = I2C_OWN_ADDRESS;
         I2C_Init_Def.I2C_Ack = I2C_Ack_Enable;
         I2C_Init_Def.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
     }
@@ -79,5 +79,31 @@ TEST(I2CDriverTestGroup, I2CInitProperly){
                                    .withParameter("STATE", ENABLE);
 
     i2c_init();
+    mock().checkExpectations();
+}
+
+TEST(I2CDriverTestGroup, I2CSendData){
+    mock().expectOneCall("I2C_GenerateSTART").withParameter("I2C", I2C_BUS)
+                                             .withParameter("STATE", ENABLE);
+    mock().expectOneCall("I2C_CheckEvent").withParameter("I2C", I2C_BUS)
+                                          .withParameter("Event", I2C_EVENT_MASTER_MODE_SELECT);
+    mock().expectOneCall("I2C_Send7bitAddress").withParameter("I2C", I2C_BUS)
+                                               .withParameter("Address", LSM_ACC_ADR)
+                                               .withParameter("Direction", I2C_Direction_Transmitter);
+    mock().expectOneCall("I2C_CheckEvent").withParameter("I2C", I2C_BUS)
+                                          .withParameter("Event", I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED);
+    mock().expectOneCall("I2C_SendData").withParameter("I2C", I2C_BUS)
+                                        .withParameter("Data", LSM_CTR_SADR);
+    mock().expectOneCall("I2C_CheckEvent").withParameter("I2C", I2C_BUS)
+                                          .withParameter("Event", I2C_EVENT_MASTER_BYTE_TRANSMITTED);
+    mock().expectOneCall("I2C_SendData").withParameter("I2C", I2C_BUS)
+                                        .withParameter("Data", LSM_CTR_ODR_50HZ | LSM_CTR_AXES_ENABLE);
+    mock().expectOneCall("I2C_CheckEvent").withParameter("I2C", I2C_BUS)
+                                          .withParameter("Event", I2C_EVENT_MASTER_BYTE_TRANSMITTED);
+    mock().expectOneCall("I2C_GenerateSTOP").withParameter("I2C", I2C_BUS)
+                                             .withParameter("STATE", ENABLE);
+
+    uint8_t data_buffer[1] = {LSM_CTR_ODR_50HZ | LSM_CTR_AXES_ENABLE};
+    i2c_write(LSM_ACC_ADR, LSM_CTR_SADR, data_buffer, 1);
     mock().checkExpectations();
 }

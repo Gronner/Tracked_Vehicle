@@ -39,7 +39,9 @@ void Task1(void * pvParameters){
 
     xLastWakeTime = xTaskGetTickCount();
     led_turn_on(LED_GREEN);
+    uint8_t data_buffer[1] = {LSM_CTR_AXES_ENABLE};
     for(;;){
+        i2c_write(LSM_ACC_ADR, LSM_CTR_SADR, data_buffer, 1);
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(250));
     }
 

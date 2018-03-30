@@ -30,7 +30,14 @@
 #define I2C_SCL_SRC GPIO_PinSource6
 #define I2C_SDA GPIO_Pin_9
 #define I2C_SDA_SRC GPIO_PinSource9
-#define I2C_CLOCK_SPEED 400000
-#define I2C_OWN_ADRESS 0x2
+#define I2C_CLOCK_SPEED 100000
+#define I2C_OWN_ADDRESS 0x00
+
+// LSM303DLHC
+#define LSM_ACC_ADR 0x32
+#define LSM_MAG_ADR 0x3C
+#define LSM_CTR_SADR 0x20
+#define LSM_CTR_ODR_50HZ 0x40
+#define LSM_CTR_AXES_ENABLE 0x07
 
 #endif // __BSP_H_
