@@ -82,3 +82,20 @@ ErrorStatus I2C_CheckEvent(I2C_TypeDef* I2Cx, uint32_t I2C_EVENT){
                                        .withParameter("Event", I2C_EVENT);
     return SUCCESS;
 }
+
+void I2C_AcknowledgeConfig(I2C_TypeDef* I2Cx, FunctionalState NewState){
+    mock().actualCall("I2C_AcknowledgeConfig").withParameter("I2C", I2Cx)
+                                              .withParameter("STATE", NewState);
+}
+
+uint8_t I2C_ReceiveData(I2C_TypeDef* I2Cx){
+    mock().actualCall("I2C_ReceiveData").withParameter("I2C", I2Cx);
+    return 0xAA;
+}
+
+FlagStatus I2C_GetFlagStatus(I2C_TypeDef* I2Cx, uint32_t I2C_FLAG){
+    mock().actualCall("I2C_GetFlagStatus").withParameter("I2C", I2Cx)
+                                          .withParameter("Flag", I2C_FLAG);
+    return SET;
+}
+

@@ -15,6 +15,11 @@ void I2C_GenerateSTART(I2C_TypeDef* I2Cx, FunctionalState NewState);
 void I2C_GenerateSTOP(I2C_TypeDef* I2Cx, FunctionalState NewState);
 void I2C_Send7bitAddress(I2C_TypeDef* I2Cx, uint8_t Address, uint8_t I2C_Direction);
 void I2C_SendData(I2C_TypeDef* I2Cx, uint8_t Data);
+void I2C_AcknowledgeConfig(I2C_TypeDef* I2Cx, FunctionalState NewState);
+uint8_t I2C_ReceiveData(I2C_TypeDef* I2Cx);
+
+FlagStatus I2C_GetFlagStatus(I2C_TypeDef* I2Cx, uint32_t I2C_FLAG);
 ErrorStatus I2C_CheckEvent(I2C_TypeDef* I2Cx, uint32_t I2C_EVENT);
+
 
 #endif // __TEST_I2C_MOCK_H
