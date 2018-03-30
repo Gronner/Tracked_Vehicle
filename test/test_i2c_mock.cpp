@@ -56,3 +56,29 @@ void I2C_Cmd(I2C_TypeDef* I2Cx, FunctionalState NewState){
     mock().actualCall("I2C_Cmd").withParameter("I2C", I2Cx)
                                 .withParameter("STATE", NewState);
 }
+
+void I2C_GenerateSTART(I2C_TypeDef* I2Cx, FunctionalState NewState){
+    mock().actualCall("I2C_GenerateSTART").withParameter("I2C", I2Cx)
+                                          .withParameter("STATE", NewState);
+}
+void I2C_GenerateSTOP(I2C_TypeDef* I2Cx, FunctionalState NewState){
+    mock().actualCall("I2C_GenerateSTOP").withParameter("I2C", I2Cx)
+                                          .withParameter("STATE", NewState);
+}
+
+void I2C_Send7bitAddress(I2C_TypeDef* I2Cx, uint8_t Address, uint8_t I2C_Direction){
+    mock().actualCall("I2C_Send7bitAddress").withParameter("I2C", I2Cx)
+                                            .withParameter("Address", Address)
+                                            .withParameter("Direction", I2C_Direction);
+}
+
+void I2C_SendData(I2C_TypeDef* I2Cx, uint8_t Data){
+    mock().actualCall("I2C_SendData").withParameter("I2C", I2Cx)
+                                     .withParameter("Data", Data);
+}
+
+ErrorStatus I2C_CheckEvent(I2C_TypeDef* I2Cx, uint32_t I2C_EVENT){
+    mock().actualCall("I2C_CheckEvent").withParameter("I2C", I2Cx)
+                                       .withParameter("Event", I2C_EVENT);
+    return SUCCESS;
+}
