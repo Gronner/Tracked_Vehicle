@@ -107,3 +107,40 @@ TEST(I2CDriverTestGroup, I2CSendData){
     i2c_write(LSM_ACC_ADR, LSM_CTR_SADR, data_buffer, 1);
     mock().checkExpectations();
 }
+
+TEST(I2CDriverTestGroup, I2CReadData){
+    mock().expectOneCall("I2C_GenerateSTART").withParameter("I2C", I2C_BUS)
+                                             .withParameter("STATE", ENABLE);
+    mock().expectOneCall("I2C_CheckEvent").withParameter("I2C", I2C_BUS)
+                                          .withParameter("Event", I2C_EVENT_MASTER_MODE_SELECT);
+    mock().expectOneCall("I2C_Send7bitAddress").withParameter("I2C", I2C_BUS)
+                                               .withParameter("Address", LSM_ACC_ADR)
+                                               .withParameter("Direction", I2C_Direction_Transmitter);
+    mock().expectOneCall("I2C_CheckEvent").withParameter("I2C", I2C_BUS)
+                                          .withParameter("Event", I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED);
+    mock().expectOneCall("I2C_SendData").withParameter("I2C", I2C_BUS)
+                                        .withParameter("Data", LSM_ACC_OUT_X_L);
+    mock().expectOneCall("I2C_CheckEvent").withParameter("I2C", I2C_BUS)
+                                          .withParameter("Event", I2C_EVENT_MASTER_BYTE_TRANSMITTED);
+
+    mock().expectOneCall("I2C_GenerateSTART").withParameter("I2C", I2C_BUS)
+                                             .withParameter("STATE", ENABLE);
+    mock().expectOneCall("I2C_CheckEvent").withParameter("I2C", I2C_BUS)
+                                          .withParameter("Event", I2C_EVENT_MASTER_MODE_SELECT);
+    mock().expectOneCall("I2C_Send7bitAddress").withParameter("I2C", I2C_BUS)
+                                               .withParameter("Address", LSM_ACC_ADR)
+                                               .withParameter("Direction", I2C_Direction_Receiver);
+    mock().expectOneCall("I2C_GetFlagStatus").withParameter("I2C", I2C_BUS)
+                                             .withParameter("Flag", I2C_FLAG_ADDR);
+    mock().expectOneCall("I2C_AcknowledgeConfig").withParameter("I2C", I2C_BUS)
+                                                 .withParameter("STATE", DISABLE);
+    mock().expectOneCall("I2C_GenerateSTOP").withParameter("I2C", I2C_BUS)
+                                            .withParameter("STATE", ENABLE);
+    mock().expectOneCall("I2C_ReceiveData").withParameter("I2C", I2C_BUS);
+    mock().expectOneCall("I2C_AcknowledgeConfig").withParameter("I2C", I2C_BUS)
+                                                 .withParameter("STATE", ENABLE);
+    uint8_t data_buffer[1] = {0};
+    i2c_read(LSM_ACC_ADR, LSM_ACC_OUT_X_L, data_buffer, 1);
+    CHECK(data_buffer[0] == 0xAA);
+    mock().checkExpectations(); 
+}

@@ -41,6 +41,7 @@ void i2c_write(uint8_t address, uint8_t subaddress, uint8_t* data_buffer, uint8_
     I2C_GenerateSTART(I2C_BUS, ENABLE);
     // Wait till master mode is engaged
     while(!I2C_CheckEvent(I2C_BUS, I2C_EVENT_MASTER_MODE_SELECT));
+    // Send slave address
     I2C_Send7bitAddress(I2C_BUS, address, I2C_Direction_Transmitter);
     // Wait till master transmitter mode is engaged
     while(!I2C_CheckEvent(I2C_BUS, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
@@ -56,4 +57,51 @@ void i2c_write(uint8_t address, uint8_t subaddress, uint8_t* data_buffer, uint8_
     }
     // Send Stop signal
     I2C_GenerateSTOP(I2C_BUS, ENABLE);
+}
+
+void i2c_read(uint8_t address, uint8_t subaddress, uint8_t* data_buffer, uint8_t buffer_len){
+    // Send Start Signal
+    I2C_GenerateSTART(I2C_BUS, ENABLE);
+    // Wait till master mode is engaged
+    while(!I2C_CheckEvent(I2C_BUS, I2C_EVENT_MASTER_MODE_SELECT));
+    // Send slave addess in transmitter mode
+    I2C_Send7bitAddress(I2C_BUS, address, I2C_Direction_Transmitter);
+    // Wait till transmitter mode is engaged
+    while(!I2C_CheckEvent(I2C_BUS, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+    // Send register subaddress
+    I2C_SendData(I2C_BUS, subaddress);
+    // Wait for byte to be transmitted
+    while(!I2C_CheckEvent(I2C_BUS, I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+
+    // Send Start Signal
+    I2C_GenerateSTART(I2C_BUS, ENABLE);
+    // Wait till master mode is engaged
+    while(!I2C_CheckEvent(I2C_BUS, I2C_EVENT_MASTER_MODE_SELECT));
+    // Send slave addess in receiver mode
+    I2C_Send7bitAddress(I2C_BUS, address, I2C_Direction_Receiver);
+    // Wait till ADDR is set
+    while(!I2C_GetFlagStatus(I2C_BUS, I2C_FLAG_ADDR));
+    // Clear ACK
+    I2C_AcknowledgeConfig(I2C_BUS, DISABLE);
+#ifndef TESTING
+    __disable_irq();
+    // Clear ADDR
+    volatile uint32_t temp __attribute__((unused)); // Used only for clearing Bit!
+    temp = I2C_BUS->SR2;
+#endif // TESTING
+    // Send Stop Signal
+    I2C_GenerateSTOP(I2C_BUS, ENABLE);
+#ifndef TESTING
+    __enable_irq();
+    // Poll RxNE
+    while((I2C_GetLastEvent(I2C_BUS) & 0x0040) != 0x000040);
+#endif // TESTING
+    // Read Data
+    data_buffer[0] = I2C_ReceiveData(I2C_BUS);
+    // Wait for STOP bit to be cleared
+#ifndef TESTING
+    while((I2C_BUS->CR1 & 0x200) == 0x200);
+#endif // TESTING
+    // Enable ACK
+    I2C_AcknowledgeConfig(I2C_BUS, ENABLE);
 }
