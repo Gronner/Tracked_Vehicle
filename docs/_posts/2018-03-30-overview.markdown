@@ -22,9 +22,7 @@ On the other hand I have never done a full blown project including all of the ab
 ## Hardware
 The heart of the tracked vehicle will be the [STM32F411E Discovery board](http://www.st.com/en/evaluation-tools/32f411ediscovery.html) with an [STM32F411 microcontroller](http://www.st.com/en/microcontrollers/stm32f411.html) displayed below.
 
-<p style="text-align:center;">
-<img alt="Top-view of the STM32F411E Discovery board" src="/assets/img/STM32F401_DISCO.png" width="60%">
-</p>
+![Top-view of the STM32F411E Discovery board]({{ "/assets/img/STM32F401_DISCO.png" | absolute_url}})
 
 The STM32F411 microcontroller is an ARM Cortex-M4 and runs on a 100MHz clock offering a range of on-chip peripherals:
 * SPI
@@ -45,9 +43,7 @@ Especially the accelerometer and the gyroscope will be useful in the application
 
 The board will be sitting on top of the TS100 dampened, tracked vehicle platform, seen in the picture below.
 
-<p style="text-align:center;"> 
-<img alt="The TS100 tracked vehicle platform" src="/assets/img/TS100_Platform.png" width="70%">
-</p>
+![The TS100 tracked vehicle platform]({{"/assets/img/TS100_Platform.png" | absolute_url}})
 
 It comes as a assemble kit which I ordered from AliExpress and is bundled with two brushed DC motors.
 These motors are already attached to fixed-gears realizing varying rotational speeds. The ones I choose run up to 150 rpm.
