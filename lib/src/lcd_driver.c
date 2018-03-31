@@ -144,8 +144,7 @@ static void carriage_return(){
 
 void lcd_put(char c){
     switch(c){
-        case 0: lcd_write_char(0xDB); //Write NULL Char
-                break;
+        case 0:  break; // Do nothing for NULL character
         case 10: line_feed();
                  break;
         case 12: line_feed();
@@ -155,4 +154,46 @@ void lcd_put(char c){
                  break;
         default: lcd_write_char(c);
     }
+}
+
+void lcd_print_string(char* _string, uint8_t str_len){
+    uint8_t i;
+    for(i = 0;i < str_len || _string[i] == '\0';i++){
+        lcd_put(_string[i]);
+    }
+}
+
+/* See: https://www.mikrocontroller.net/articles/FAQ#Eigene_Umwandlungsfunktionen */
+static void _itoa(int32_t number, char* str_buffer){
+    uint32_t number_unsigned;
+    if(number < 0){
+        str_buffer[0] = '-';
+        str_buffer++;
+        number_unsigned = ((uint32_t) -(number + 1)) + 1;
+    }
+    else{
+        number_unsigned = (uint32_t) number;
+    }
+    uint8_t i = 0;
+    do{
+        str_buffer[i++] = '0' + number_unsigned % 10;
+        number_unsigned /= 10;
+    }while(number_unsigned > 0);
+
+    // String is now in reverse, so it needs to be turned around
+    uint8_t j;
+    char temp;
+    for(j = 0;j < (i / 2);++j){
+        temp = str_buffer[j];
+        str_buffer[j] = str_buffer[i-j-1];
+        str_buffer[i-j-1] = temp;
+    }
+    str_buffer[i] = '\0';
+}
+
+void lcd_print_integer(int32_t number){
+    char str_buffer[12] = {'\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'}; // Otherwise garbage gets put out
+    _itoa(number, str_buffer);
+    lcd_print_string(str_buffer, 12);
+    lcd_put('\n');
 }
