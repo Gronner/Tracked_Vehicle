@@ -14,6 +14,8 @@ extern "C"{
 #include "test_gpio_mock.h"
 #include "test_rcc_mock.h"
 
+#define CHECK_BIT(byte, bit) ((byte) & (1 << (bit)))
+
 GPIO_InitTypeDef LCD_Init_Def;
 uint16_t all_data_pins = LCD_D4 | LCD_D5 | LCD_D6 | LCD_D7;
 
@@ -35,73 +37,101 @@ TEST_GROUP(LcdDriverTestGroup){
     }
 };
 
+void mock_nibble_write(uint8_t nibble){
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", LCD_PORT)
+                                        .withParameter("GPIO_Pin", LCD_EN);
+    for(uint8_t i = 0;i < 4;i++){
+        uint16_t pin = 1 << (LCD_SHIFT + i);
+        if(CHECK_BIT(nibble, i)){
+            mock().expectOneCall("GPIO_SetBits").withParameter("Port", LCD_PORT)
+                                                .withParameter("GPIO_Pin", pin);
+        }
+        else{
+            mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
+                                                .withParameter("GPIO_Pin", pin);
+        }
+    }
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
+                                          .withParameter("GPIO_Pin", LCD_EN);
+}
+
 TEST(LcdDriverTestGroup, InitLcdProperly){
     mock_c()->installComparator("GPIO_InitType", gpio_is_equal, gpio_to_string);
     mock().expectOneCall("RCC_AHB1PeriphClockCmd").withParameter("HW_Clock", RCC_AHB1Periph_GPIOD)
                                                   .withParameter("STATE", ENABLE);
-   mock().expectOneCall("GPIO_Init").withParameter("Port", LCD_PORT)
+    mock().expectOneCall("GPIO_Init").withParameter("Port", LCD_PORT)
                                     .withParameterOfType("GPIO_InitType",
                                                          "Pin_Init_Struct",
                                                          &LCD_Init_Def);
-   // Clear all data bits
-   mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
-                                         .withParameter("GPIO_Pin", all_data_pins);
-   // Set RS to command 
-   mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
-                                         .withParameter("GPIO_Pin", LCD_RS);
-   // Enable LCD
-   mock().expectOneCall("GPIO_SetBits").withParameter("Port", LCD_PORT)
-                                       .withParameter("GPIO_Pin", LCD_EN);
-   // Send 8-bit mode 3 times
-   uint16_t port_value = LCD_8b << LCD_SHIFT;
-   mock().expectOneCall("GPIO_Write").withParameter("Port", LCD_PORT)
-                                     .withParameter("Port_Value", port_value);
-   mock().expectOneCall("GPIO_Write").withParameter("Port", LCD_PORT)
-                                     .withParameter("Port_Value", port_value);
-   mock().expectOneCall("GPIO_Write").withParameter("Port", LCD_PORT)
-                                     .withParameter("Port_Value", port_value);
-   // Send 4-bit mode command
-   port_value = LCD_4b << LCD_SHIFT;
-   mock().expectOneCall("GPIO_Write").withParameter("Port", LCD_PORT)
-                                     .withParameter("Port_Value", port_value);
-   // Send display mode command
-   // High nibble first
-   port_value = (LCD_DM >> 4);
-   port_value = port_value << LCD_SHIFT;
-   mock().expectOneCall("GPIO_Write").withParameter("Port", LCD_PORT)
-                                     .withParameter("Port_Value", port_value);
-   // Low nibble second
-   port_value = (LCD_DM & 0x0f);
-   port_value = port_value << LCD_SHIFT;
-   mock().expectOneCall("GPIO_Write").withParameter("Port", LCD_PORT)
-                                     .withParameter("Port_Value", port_value);
-   // Send active display command
-   port_value = LCD_ACT << LCD_SHIFT;
-   mock().expectOneCall("GPIO_Write").withParameter("Port", LCD_PORT)
-                                     .withParameter("Port_Value", port_value);
-   // Clear LCD
-   port_value = LCD_CLR << LCD_SHIFT;
-   mock().expectOneCall("GPIO_Write").withParameter("Port", LCD_PORT)
-                                     .withParameter("Port_Value", port_value);
+    // Clear all data bits
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
+                                          .withParameter("GPIO_Pin", all_data_pins);
+    // Set RS to command 
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
+                                          .withParameter("GPIO_Pin", LCD_RS);
+    // Enable LCD
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
+                                        .withParameter("GPIO_Pin", LCD_EN);
+    // Send 8-bit mode 3 times
+    for(uint8_t i = 0;i < 3; i++){
+        mock_nibble_write(LCD_8b);
+    }
+    // Send 4-bit mode command
+    mock_nibble_write(LCD_4b);
+    // Send display mode command
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
+                                          .withParameter("GPIO_Pin", LCD_RS);
+    // High nibble first
+    mock_nibble_write(0x2);
+    // Low nibble second
+    mock_nibble_write(0x8);
+    // Send active display command
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
+                                          .withParameter("GPIO_Pin", LCD_RS);
+    // High nibble first
+    mock_nibble_write(0x0);
+    // Low nibble second
+    mock_nibble_write(0xF);
+    // Clear LCD
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
+                                          .withParameter("GPIO_Pin", LCD_RS);
+    // High nibble first
+    mock_nibble_write(0x0);
+    // Low nibble second
+    mock_nibble_write(0x1);
 
-   lcd_init();
-   mock().checkExpectations();
+    lcd_init();
+    mock().checkExpectations();
 }
 
-TEST(LcdDriverTestGroup, LcdSendCommand){
+TEST(LcdDriverTestGroup, LcdSendCommandOneNibble){
     // Set RS to command
     mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
                                           .withParameter("GPIO_Pin", LCD_RS);
-    uint8_t command = LCD_ACT;
-    uint16_t port_value;
-    port_value = ((uint16_t) command >> 4);
-    port_value = port_value << LCD_SHIFT;
-    mock().expectOneCall("GPIO_Write").withParameter("Port", LCD_PORT)
-                                      .withParameter("Port_Value", port_value);
-    port_value = ((uint16_t) command & 0x0f);
-    port_value = port_value << LCD_SHIFT;
-    mock().expectOneCall("GPIO_Write").withParameter("Port", LCD_PORT)
-                                      .withParameter("Port_Value", port_value);
-    lcd_write_cmd(command);
+    mock_nibble_write(0x0);
+    mock_nibble_write(0xF);
+    lcd_write_cmd(LCD_ACT);
+    mock().checkExpectations();
+}
+
+TEST(LcdDriverTestGroup, LcdSendCommandTwoNibble){
+    // Set RS to command
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
+                                          .withParameter("GPIO_Pin", LCD_RS);
+    mock_nibble_write(0x2);
+    mock_nibble_write(0x8);
+
+    lcd_write_cmd(LCD_DM);
+    mock().checkExpectations();
+}
+
+TEST(LcdDriverTestGroup, LcdSendChar){
+    // Set RS to data
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", LCD_PORT)
+                                        .withParameter("GPIO_Pin", LCD_RS);
+    mock_nibble_write(0x6);
+    mock_nibble_write(0x1);
+
+    lcd_write_char('a');
     mock().checkExpectations();
 }

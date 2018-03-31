@@ -50,7 +50,7 @@
 #define LCD_D5 GPIO_Pin_9
 #define LCD_D6 GPIO_Pin_10
 #define LCD_D7 GPIO_Pin_11
-#define LCD_SHIFT 7
+#define LCD_SHIFT 8 //First data pin is pin 8 or 0x0100
 // LCD Command Values
 #define LCD_8b 0x03
 #define LCD_4b 0x02

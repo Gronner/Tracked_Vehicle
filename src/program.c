@@ -15,7 +15,9 @@ void Task2(void * pvParameters);
 
 int main(void){
     led_init();
+    led_turn_on(LED_RED);
     lcd_init();
+    led_turn_on(LED_ORANGE);
 
     create_tasks();
 
@@ -39,9 +41,10 @@ void Task1(void * pvParameters){
     TickType_t xLastWakeTime;
 
     xLastWakeTime = xTaskGetTickCount();
-    led_turn_on(LED_GREEN);
     // uint8_t data_buffer[1] = {LSM_CTR_AXES_ENABLE};
     for(;;){
+        led_toggle(LED_GREEN);
+        lcd_write_char('a');
         // i2c_write(LSM_ACC_ADR, LSM_CTR_SADR, data_buffer, 1);
         // i2c_read(LSM_ACC_ADR, LSM_ACC_OUT_X_L, data_buffer, 1);
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(250));
