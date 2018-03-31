@@ -20,7 +20,7 @@ description: >- # this means to ignore newlines until "baseurl:"
              Using an STM32F411 Chip on the STM32F401C-Discovery Board, the ST 
              Standard Driver Library and FreeRTOS this project is aimed at getting 
              a tracked vehicle to move.
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "/" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  Gronner
 
