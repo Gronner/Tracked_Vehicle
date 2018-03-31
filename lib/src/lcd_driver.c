@@ -118,3 +118,8 @@ void lcd_cursor_put(uint8_t row, uint8_t column){
     uint8_t cmd = 0x80 + cursor_pos;
     lcd_write_cmd(cmd);
 }
+
+void lcd_clear(){
+    lcd_write_cmd(LCD_CLR);
+    lcd_cursor_put(0, 0);
+}

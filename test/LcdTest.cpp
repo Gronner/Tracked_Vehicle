@@ -175,3 +175,20 @@ TEST(LcdDriverTestGroup, LcdPutCursorR1C17){
     lcd_cursor_put(0, 16);
     mock().checkExpectations();
 }
+
+TEST(LcdDriverTestGroup, LcdClearScreen){
+    // Clear screen
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
+                                          .withParameter("GPIO_Pin", LCD_RS);
+    mock_nibble_write(0x0);
+    mock_nibble_write(0x1);
+    // Set cursor to 0,0
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
+                                          .withParameter("GPIO_Pin", LCD_RS);
+    mock_nibble_write(0x8);
+    mock_nibble_write(0x0);
+
+    lcd_clear();
+    mock().checkExpectations();
+}
+
