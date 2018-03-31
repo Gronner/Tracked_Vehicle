@@ -1,0 +1,92 @@
+---
+layout: post
+title:  "Overview of the Project"
+date:   2018-03-30 23:32:15 +0200
+categories: jekyll update
+---
+## Goals and Motivation
+The goal of this project is to build a tracked vehicle.
+Depending on the feasibility and performance of the target platform a certain level of self-driving should be reached.
+But first and foremost this project is build to have fun and to teach myself about:
+* control theory,
+* embedded system software design,
+* real-time applications,
+* rapid prototyping,
+* electrical design and
+* unit testing.
+
+I do have a bachelor's degree in mechatronics and are currently pursuing a master's degree in mechatronics as well.
+As my focus is on embedded systems and control theory I already have a theoretical background and some practical experience in the tasks at hand.
+On the other hand I have never done a full blown project including all of the above, which is why I'm exited to build it.
+
+## Hardware
+The heart of the tracked vehicle will be the [STM32F411E Discovery board](http://www.st.com/en/evaluation-tools/32f411ediscovery.html) with an [STM32F411 microcontroller](http://www.st.com/en/microcontrollers/stm32f411.html) displayed below.
+
+<p style="text-align:center;">
+<img alt="Top-view of the STM32F411E Discovery board" src="/assets/img/STM32F401_DISCO.png" width="60%">
+</p>
+
+The STM32F411 microcontroller is an ARM Cortex-M4 and runs on a 100MHz clock offering a range of on-chip peripherals:
+* SPI
+* I2C
+* ADC
+* USB 2.0 OTG
+
+The VE version has a 512kB flash memory and a 128kB RAM.
+The chip is already connected to some interesting peripherals on the discovery board:
+* [ST-LINK/V2](http://www.st.com/en/development-tools/st-link-v2.html) used for flashing and debugging the chip.
+* Power-Supply for 3 V and 5 V applications.
+* [L3GD20](http://www.st.com/en/mems-and-sensors/l3gd20.html) is a 3-axis gyroscope made by ST, hooked up via SPI to the microcontroller.
+* [LSM303DLHC](http://www.st.com/en/mems-and-sensors/lsm303dlhc.html) is a 3D accelerometer and a 3D magnetic sensor, hooked up via I²C to the microcontroller.
+* Four user LEDs and one user button, as well as a reset button.
+* USB OTG with a micro USB connector, audio sensors and outputs.
+
+Especially the accelerometer and the gyroscope will be useful in the application of getting the vehicle to drive.
+
+The board will be sitting on top of the TS100 dampened, tracked vehicle platform, seen in the picture below.
+
+<p style="text-align:center;"> 
+<img alt="The TS100 tracked vehicle platform" src="/assets/img/TS100_Platform.png" width="70%">
+</p>
+
+It comes as a assemble kit which I ordered from AliExpress and is bundled with two brushed DC motors.
+These motors are already attached to fixed-gears realizing varying rotational speeds. The ones I choose run up to 150 rpm.
+I decided on DC motors, as these are easy to control, e.g. with a PWM signal and a H-Bridge.
+
+## Software
+All application code will be written in the C programming language.
+From my experience this is still the industry standard for embedded system programming, though I'd like to dabble in C++ or even [Ada](https://en.wikipedia.org/wiki/Ada_(programming_language)) in a later project or a revamp of the project.
+
+In a precursor to this project I used the [ARM CSMIS](https://developer.arm.com/embedded/cmsis) definitions to program the chip by directly setting the registers.
+As this won't be my focus during this project and for the sake of speed, I'll be using the [Standard Peripheral Library](http://www.st.com/en/embedded-software/stm32-standard-peripheral-libraries.html?querycriteria=productId=LN1939) provided by STMicroelectronics for the STM32F4 series in the 1.1 version.
+Also with the Standard Peripheral Library I do not have to implement my own Hardware Abstraction Layer (HAL), to capsulate the register accesses, which will come into play with the unit tests.
+I decided against the use of the new HAL provided with [STM32Cube](http://www.st.com/en/embedded-software/stm32cube-mcu-packages.html?querycriteria=productId=LN1897), because it seems rather extensive and heavyweight for what I need.
+STM is offering a Low Level API (LL) as well, but I haven't looked into it beforehand.
+If any performance issues arise, I'll look into optimizing at the register level.
+
+For a real-time operating system (RTOS) I have chosen [FreeRTOS](https://www.freertos.org/), as it is free and open software and seemed well documented, easy to set up and already provided a port to Cortex-M4 architectures.
+It is currently distributed with an MIT license.
+At university I already worked with [eCos](http://ecos.sourceware.org/), but I wanted to see a different way to implement an RTOS.
+As I'll try to write the low-level drivers and application code independent of the RTOS, if any problems arise I should be able to change the RTOS later on.
+
+I'll write unit tests for every module I write myself. 
+For this I have chosen [CppUTest](http://cpputest.github.io/), as I already worked through the book [Test-Driven Development for Embedded C](https://www.amazon.com/Driven-Development-Embedded-Pragmatic-Programmers/dp/193435662X/ref=sr_1_1?ie=UTF8&qid=1522454256&sr=8-1&keywords=test+driven+development+for+embedded+c) by James Grenning with it.
+It also seemed to fit my needs well, was easy to setup and use.
+It's capabilities for mocking extern functions was also a big plus.
+
+## Tools
+
+All software work will be done on a Linux machine running Ubuntu, the code will be available at my [Github repository](https://github.com/Gronner/Tracked_Vehicle).
+I use a [Saleae Logic 8](https://blog.saleae.com/) for logic analysis.
+For basic electric work I use a HAKO FX-888D soldering iron, a cheap multimeter and some standard tools.
+
+{::comment}
+{% highlight ruby %}
+def print_hi(name)
+  puts "Hi, #{name}"
+end
+print_hi('Tom')
+#=> prints 'Hi, Tom' to STDOUT.
+{% endhighlight %}
+{:/comment}
+
