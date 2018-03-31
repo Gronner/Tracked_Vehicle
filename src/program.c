@@ -3,7 +3,8 @@
 #include "task.h"
 #include "bsp.h"
 #include "led_driver.h"
-#include "i2c_driver.h"
+// #include "i2c_driver.h"
+#include "lcd_driver.h"
 
 int main(void);
 void vApplicationMallocFailedHook (void);
@@ -14,7 +15,7 @@ void Task2(void * pvParameters);
 
 int main(void){
     led_init();
-    i2c_init();
+    lcd_init();
 
     create_tasks();
 
@@ -39,10 +40,10 @@ void Task1(void * pvParameters){
 
     xLastWakeTime = xTaskGetTickCount();
     led_turn_on(LED_GREEN);
-    uint8_t data_buffer[1] = {LSM_CTR_AXES_ENABLE};
+    // uint8_t data_buffer[1] = {LSM_CTR_AXES_ENABLE};
     for(;;){
-        i2c_write(LSM_ACC_ADR, LSM_CTR_SADR, data_buffer, 1);
-        i2c_read(LSM_ACC_ADR, LSM_ACC_OUT_X_L, data_buffer, 1);
+        // i2c_write(LSM_ACC_ADR, LSM_CTR_SADR, data_buffer, 1);
+        // i2c_read(LSM_ACC_ADR, LSM_ACC_OUT_X_L, data_buffer, 1);
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(250));
     }
 
