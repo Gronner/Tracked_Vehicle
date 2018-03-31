@@ -119,7 +119,40 @@ void lcd_cursor_put(uint8_t row, uint8_t column){
     lcd_write_cmd(cmd);
 }
 
-void lcd_clear(){
+void lcd_clear(void){
     lcd_write_cmd(LCD_CLR);
     lcd_cursor_put(0, 0);
+}
+
+static void line_feed(){
+    if(cursor_pos & 0xf0){  // If cursor is in 2nd row
+        lcd_cursor_put(0, cursor_pos & 0x0f); // Put in 1st row, current column
+    }
+    else{
+        lcd_cursor_put(1, cursor_pos & 0x0f); // Put in 1st row, current column
+    }
+}
+
+static void carriage_return(){
+    if(cursor_pos & 0xf0){  // If cursor is in 2nd row
+        lcd_cursor_put(1, 0); // Put in 1st row, 1st column
+    }
+    else{
+        lcd_cursor_put(0, 0); // Put in 1st row, 1st column
+    }
+}
+
+void lcd_put(char c){
+    switch(c){
+        case 0: lcd_write_char(0xDB); //Write NULL Char
+                break;
+        case 10: line_feed();
+                 break;
+        case 12: line_feed();
+                 carriage_return();
+                 break;
+        case 13: carriage_return();
+                 break;
+        default: lcd_write_char(c);
+    }
 }

@@ -191,4 +191,3 @@ TEST(LcdDriverTestGroup, LcdClearScreen){
     lcd_clear();
     mock().checkExpectations();
 }
-
