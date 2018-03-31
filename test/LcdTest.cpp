@@ -135,3 +135,43 @@ TEST(LcdDriverTestGroup, LcdSendChar){
     lcd_write_char('a');
     mock().checkExpectations();
 }
+
+TEST(LcdDriverTestGroup, LcdPutCursorR1C1){
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
+                                          .withParameter("GPIO_Pin", LCD_RS);
+    mock_nibble_write(0x8);
+    mock_nibble_write(0x0);
+
+    lcd_cursor_put(0, 0);
+    mock().checkExpectations();
+}
+
+TEST(LcdDriverTestGroup, LcdPutCursorR2C16){
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
+                                          .withParameter("GPIO_Pin", LCD_RS);
+    mock_nibble_write(0xC);
+    mock_nibble_write(0xF);
+
+    lcd_cursor_put(1, 15);
+    mock().checkExpectations();
+}
+
+TEST(LcdDriverTestGroup, LcdPutCursorR2C17){
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
+                                          .withParameter("GPIO_Pin", LCD_RS);
+    mock_nibble_write(0x8);
+    mock_nibble_write(0x0);
+
+    lcd_cursor_put(1, 16);
+    mock().checkExpectations();
+}
+
+TEST(LcdDriverTestGroup, LcdPutCursorR1C17){
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
+                                          .withParameter("GPIO_Pin", LCD_RS);
+    mock_nibble_write(0xC);
+    mock_nibble_write(0x0);
+
+    lcd_cursor_put(0, 16);
+    mock().checkExpectations();
+}

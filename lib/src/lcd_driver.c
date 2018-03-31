@@ -6,8 +6,18 @@
 #define ALL_DATA_PINS ((uint16_t)(LCD_D4 | LCD_D5 | LCD_D6 | LCD_D7))
 #define CHECK_BIT(byte, bit) ((byte) & (1 << (bit)))
 
+/* Upper nibble = row
+ * 0x0X -> 1st row
+ * 0x4X -> 2nd row
+ * Lower nibble = column
+ * 0xX0 -> 1st row
+ * 0xXF -> 16th row
+ */
+static uint8_t cursor_pos; 
+
 static void write_nibble(uint8_t nibble);
 static void write_byte(uint8_t byte);
+static void update_cursor_pos(void);
 
 void lcd_init(void){
     // Activate GPIO port D periperhal clock
@@ -44,6 +54,8 @@ void lcd_init(void){
     lcd_write_cmd(LCD_ACT);
     // Clear LCD
     lcd_write_cmd(LCD_CLR);
+
+    cursor_pos = 0x00; // Cursor in first row, first column
 }
 
 static void write_nibble(uint8_t nibble){
@@ -81,4 +93,28 @@ void lcd_write_cmd(uint8_t cmd){
 void lcd_write_char(char c){
     GPIO_SetBits(LCD_PORT, LCD_RS);
     write_byte(c);
+}
+
+static void update_cursor_pos(void){
+    if(cursor_pos > 0x4F){  // Cursor is beyond the 16 columns of the 2nd row
+        cursor_pos = 0x00;
+    }
+    if((cursor_pos > 0x0F) && (cursor_pos < 0x40)){ // Cursor is beyond the 16 columns of the 1st row
+        cursor_pos = 0x40;
+    }
+}
+
+static uint8_t get_cursor_address(uint8_t row, uint16_t column){
+    uint8_t cursor_address;
+    cursor_address = row * 0x40 + column;
+    return cursor_address;
+}
+
+void lcd_cursor_put(uint8_t row, uint8_t column){
+    uint8_t cursor_target;
+    cursor_target = get_cursor_address(row, column);
+    cursor_pos = cursor_target;
+    update_cursor_pos();
+    uint8_t cmd = 0x80 + cursor_pos;
+    lcd_write_cmd(cmd);
 }
