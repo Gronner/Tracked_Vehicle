@@ -59,3 +59,8 @@ void GPIO_PinAFConfig(GPIO_TypeDef* GPIOx, uint16_t GPIO_PinSource, uint8_t GPIO
                                          .withParameter("Pins", GPIO_PinSource) 
                                          .withParameter("AF_Sel", GPIO_AF);
 }
+
+void GPIO_Write(GPIO_TypeDef* GPIOx, uint16_t PortVal){
+    mock().actualCall("GPIO_Write").withParameter("Port", GPIOx)
+                                   .withParameter("Port_Value", PortVal);
+}
