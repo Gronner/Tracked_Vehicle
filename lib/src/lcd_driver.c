@@ -20,7 +20,7 @@ void lcd_init(void){
 
     // Set all data pins to low
     GPIO_ResetBits(LCD_PORT, ALL_DATA_PINS);
-    // Set RW to write
+    // Set RS to command
     GPIO_ResetBits(LCD_PORT, LCD_RS);
     // Set EN to 1
     GPIO_SetBits(LCD_PORT, LCD_EN);
@@ -49,4 +49,25 @@ void lcd_init(void){
     // Clear LCD
     port_value = LCD_CLR << LCD_SHIFT;
     GPIO_Write(LCD_PORT, port_value);
+}
+
+static void write_nibble(uint8_t nibble){
+    uint16_t port_value;
+    port_value = ((uint16_t) nibble) << LCD_SHIFT;
+    GPIO_Write(LCD_PORT, port_value);
+}
+
+static void write_byte(uint8_t byte){
+    uint8_t nibble;
+    // Higher nibble
+    nibble = byte >> 4;
+    write_nibble(nibble);
+    // Lower nibble
+    nibble = (byte & 0x0F);
+    write_nibble(nibble);
+}
+
+void lcd_write_cmd(uint8_t cmd){
+    GPIO_ResetBits(LCD_PORT, LCD_RS);
+    write_byte(cmd);
 }

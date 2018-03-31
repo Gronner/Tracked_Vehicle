@@ -46,7 +46,7 @@ TEST(LcdDriverTestGroup, InitLcdProperly){
    // Clear all data bits
    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
                                          .withParameter("GPIO_Pin", all_data_pins);
-   // Set RW to write
+   // Set RS to command 
    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
                                          .withParameter("GPIO_Pin", LCD_RS);
    // Enable LCD
@@ -86,4 +86,22 @@ TEST(LcdDriverTestGroup, InitLcdProperly){
 
    lcd_init();
    mock().checkExpectations();
+}
+
+TEST(LcdDriverTestGroup, LcdSendCommand){
+    // Set RS to command
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
+                                          .withParameter("GPIO_Pin", LCD_RS);
+    uint8_t command = LCD_ACT;
+    uint16_t port_value;
+    port_value = ((uint16_t) command >> 4);
+    port_value = port_value << LCD_SHIFT;
+    mock().expectOneCall("GPIO_Write").withParameter("Port", LCD_PORT)
+                                      .withParameter("Port_Value", port_value);
+    port_value = ((uint16_t) command & 0x0f);
+    port_value = port_value << LCD_SHIFT;
+    mock().expectOneCall("GPIO_Write").withParameter("Port", LCD_PORT)
+                                      .withParameter("Port_Value", port_value);
+    lcd_write_cmd(command);
+    mock().checkExpectations();
 }
