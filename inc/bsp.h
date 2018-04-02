@@ -33,7 +33,6 @@
 #define I2C_CLOCK_SPEED 100000
 #define I2C_OWN_ADDRESS 0x00
 
-
 // LCD
 #define LCD_PORT GPIOD
 #define LCD_RS GPIO_Pin_6
