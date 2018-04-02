@@ -22,7 +22,10 @@
 #define LSM_ACC_50HZ 0x04   // Set data rate to 50Hz
 #define LSM_ACC_X_EN 0x20   // Enable X axis
 #define LSM_ACC_Y_EN 0x40   // Enable Y axis
+#define LSM_ACC_Z_EN 0x80   // Enable Y axis
+#define LSM_ACC_ALL_AX_EN 0xE // Enable all axes
 #define LSM_ACC_4G 0x08     // Use 4g as full-scale
 
 void lsm_init(void);
+uint16_t lsm_read_axis(char axis);
 #endif // __LSM_DRIVER_H_

@@ -3,7 +3,8 @@
 #include "task.h"
 #include "bsp.h"
 #include "led_driver.h"
-// #include "i2c_driver.h"
+#include "i2c_driver.h"
+#include "lsm_driver.h"
 #include "lcd_driver.h"
 
 int main(void); void vApplicationMallocFailedHook (void);
@@ -14,9 +15,9 @@ void Task2(void * pvParameters);
 
 int main(void){
     led_init();
-    led_turn_on(LED_RED);
     lcd_init();
-    led_turn_on(LED_ORANGE);
+    i2c_init();
+    lsm_init();
 
     create_tasks();
 
@@ -38,18 +39,13 @@ void create_tasks(void){
 
 void Task1(void * pvParameters){
     TickType_t xLastWakeTime;
-
+    uint16_t acc_x_axis_data;
     xLastWakeTime = xTaskGetTickCount();
-    // uint8_t data_buffer[1] = {LSM_CTR_AXES_ENABLE};
-    uint8_t i = 0;
     for(;;){
         led_toggle(LED_GREEN);
-        lcd_put('\t');
-        lcd_print_string("Hello World!\n", 13);
-        lcd_print_integer((int32_t)i);
-        i++;
-        // i2c_write(LSM_ACC_ADR, LSM_CTR_SADR, data_buffer, 1);
-        // i2c_read(LSM_ACC_ADR, LSM_ACC_OUT_X_L, data_buffer, 1);
+        acc_x_axis_data = lsm_read_axis('z');
+        lcd_print_string("\tZ-Axis reads:\n", 15);
+        lcd_print_integer((uint32_t)acc_x_axis_data); 
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(250));
     }
 
