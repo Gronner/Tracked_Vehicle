@@ -44,6 +44,7 @@ void Task1(void * pvParameters){
     uint8_t i = 0;
     for(;;){
         led_toggle(LED_GREEN);
+        lcd_put('\t');
         lcd_print_string("Hello World!\n", 13);
         lcd_print_integer((int32_t)i);
         i++;

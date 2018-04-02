@@ -33,14 +33,6 @@
 #define I2C_CLOCK_SPEED 100000
 #define I2C_OWN_ADDRESS 0x00
 
-// LSM303DLHC
-#define LSM_ACC_ADR 0x32
-#define LSM_MAG_ADR 0x3C
-#define LSM_CTR_ODR_50HZ 0x40
-#define LSM_CTR_AXES_ENABLE 0x07
-// Register Map
-#define LSM_CTR_SADR 0x20
-#define LSM_ACC_OUT_X_L 0x28
 
 // LCD
 #define LCD_PORT GPIOD

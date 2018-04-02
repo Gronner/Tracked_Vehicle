@@ -16,6 +16,16 @@ extern "C"{
 #include "test_gpio_mock.h"
 #include "test_i2c_mock.h"
 
+// Test definitions
+// LSM303DLHC
+#define LSM_ACC_ADR 0x32
+#define LSM_MAG_ADR 0x3C
+#define LSM_CTR_ODR_50HZ 0x40
+#define LSM_CTR_AXES_ENABLE 0x07
+// Register Map
+#define LSM_CTR_SADR 0x20
+#define LSM_ACC_OUT_X_L 0x28
+
 GPIO_InitTypeDef I2C_Pin_Init_Def;
 I2C_InitTypeDef I2C_Init_Def;
 
