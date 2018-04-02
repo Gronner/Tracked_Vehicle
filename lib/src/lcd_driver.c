@@ -145,6 +145,8 @@ static void carriage_return(){
 void lcd_put(char c){
     switch(c){
         case 0:  break; // Do nothing for NULL character
+        case 9:  lcd_clear(); // Tab character clears screen
+                 break;
         case 10: line_feed();
                  break;
         case 12: line_feed();
