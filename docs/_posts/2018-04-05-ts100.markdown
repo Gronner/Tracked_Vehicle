@@ -1,0 +1,70 @@
+---
+layout: post
+title:  "The TS100 Damped, Tracked Platform"
+date:   2018-04-05 22:05:45 +0200
+categories: jekyll update
+---
+[//]: <> Add Tex Math environment
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+## The TS100 tank platform
+As I wanted to build a moving vehicle that was not to complicated to control and can run somewhat independent from the ground it is driving on.
+A tracked platform meets both these criteria as it only needs to be driven by two motors, one for each track, and the tracks can keep a good grip on most undergrounds.
+I didn't want to do a lot of mechanical design for this project, which is why I chose to buy an assembly kit.
+A search on AliExpress led me to the TS100 platform.
+![The TS100 fully assembled]({{ "/assets/img/TS100_Full.png" | absulute_url }})
+It's a tracked platform featuring two brushed 12V DC motors and can be ordered with varying gear transmission ratios.
+The platform is usually around 70€ ±10€.
+It's around 26cm (10.3in) wide, 28cm (11in) long and 9cm (3.5in) high.
+It already comes with a lot of mounting points, is made of an aluminum alloy, which should make it easily drillable if I need other mounting points for hardware.
+
+## Which version to choose
+When I bought the TS100 I could select one of four options:
+* 100 rpm
+* 150 rpm
+* 200 rpm
+* 300 rpm
+
+These are achieved by attaching different gearboxes to the same motor.
+The TS100 is using the FH-37GB520 12V DC motor.
+The following table lists the specification of the variants I could choose from.
+
+|-----|-----|-----|-----|-----|-----|
+|Idle Speed [rpm]|Idle Current [A]|Load Speed [rpm]|Load Current [A]|Rated Torque [Nm]|Stall Current [A]|
+|-----|-----|-----|-----|-----|-----|
+|100|0.17|93|0.68|0.68|2.19|
+|150|0.17|128|0.68|0.49|2.19|
+|200|0.17|175|0.68|0.34|2.19|
+|300|0.17|245|0.68|0.2|2.19|
+
+As you can see, and as is expected by the mechanics behind gearboxes, the faster the output shaft spins, the lower the available torque is.
+I did some rough calculations based on the motor dimensions and the pictures to decide for a version.
+I'll only show them for the 150rpm version as this is the one I chose in the end.
+From the pictures I assumed the driving wheel has a diameter $$d$$ of around 3.7mm (1.45in).
+
+Calculating the velocity of the tracked platform at full speed:
+
+$$v = 2\pi \cdot r \cdot n$$
+
+Where $$n$$ is the rotational speed in revolutions per second and $$r$$ is the radius of the output wheel.
+Which comes out to about 0.29m/s for the 150rpm version.
+
+For calculating the force that the motor can exert on the ground is calculated by:
+
+$$F_M = 2 \cdot r \cdot T$$
+
+where $$T$$ is the torque at the output shaft. 
+It is multiplied by two, as I have two engines.
+This comes out to about 26.5N per engine, so 53N in total.
+With this value and Newton's second law the maximum acceleration of the platform can be calculated.
+
+## The assembly process
+In the following picture all parts, as they were delivered, are displayed.
+![All TS100 parts layed out]({{ "/assets/img/TS100_Parts.png" | absulute_url }})
+As you can see most things were packed in a way, that you only need to open one package to build one part of the platform.
+All tools apart from a Phillips screwdriver where included.
+The assembly was rather easy as the TS100 comes with a fully pictured assembly instruction.
+Here are some more pictures of the build process and  [a video of one of the tracks running with a 5V supply](https://youtu.be/k675GzAA0rQ).
+
+![A single bearing wheel]({{ "/assets/img/TS100_SingleWheel.png" | absulute_url }})
+![Both sides of the TS100 assembled ]({{ "/assets/img/TS100_Sides.png" | absulute_url }})
