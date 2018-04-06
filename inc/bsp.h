@@ -49,4 +49,11 @@
 #define LCD_ACT 0x0F
 #define LCD_CLR 0x01 // Also resets cursor
 
+// DC Motor
+#define DC_CTRL_PORT GPIOD
+#define DC_CTRL_PIN_LF GPIO_Pin_0
+#define DC_CTRL_PIN_LR GPIO_Pin_1
+#define DC_CTRL_PIN_RF GPIO_Pin_2
+#define DC_CTRL_PIN_RR GPIO_Pin_3
+
 #endif // __BSP_H_
