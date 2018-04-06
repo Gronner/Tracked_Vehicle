@@ -6,6 +6,8 @@
 #include "i2c_driver.h"
 #include "lsm_driver.h"
 #include "lcd_driver.h"
+#include "pwm_driver.h"
+#include "motor_driver.h"
 
 int main(void); void vApplicationMallocFailedHook (void);
 void vApplicationStackOverflowHook(void);
@@ -18,6 +20,9 @@ int main(void){
     lcd_init();
     i2c_init();
     lsm_init();
+    // PWM init must always come after motor init!
+    motor_init();
+    pwm_init();
 
     create_tasks();
 

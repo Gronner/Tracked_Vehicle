@@ -32,11 +32,20 @@ TEST_GROUP(DCMotDriverTestGroup){
 };
 
 /* For a passing test the folloing has to happen:
- * Enable peripheral clock to timer and GPIOs
- * Call Timer Init with proper settings
- * Call PWM Init twice with proper settings
+ * Enable peripheral clock to GPIOs
  * Call GPIO Init with proper settings
  */
 TEST(DCMotDriverTestGroup, DCMotInitProperly){
-    FAIL("This is intended to fail");
+    mock_c()->installComparator("GPIO_InitType", gpio_is_equal, gpio_to_string);
+
+    mock().expectOneCall("RCC_AHB1PeriphClockCmd").withParameter("HW_Clock", RCC_AHB1Periph_GPIOD)
+                                                  .withParameter("STATE", ENABLE);
+    mock().expectOneCall("GPIO_Init").withParameter("Port", DC_CTRL_PORT)
+                                     .withParameterOfType("GPIO_InitType",
+                                                         "Pin_Init_Struct",
+                                                         &Ctrl_Init_Def);
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", DC_CTRL_PORT)
+                                          .withParameter("GPIO_Pin", all_ctrl_pins);
+    motor_init();
+    mock().checkExpectations();
 }
