@@ -49,3 +49,66 @@ TEST(DCMotDriverTestGroup, DCMotInitProperly){
     motor_init();
     mock().checkExpectations();
 }
+
+// Vehicle is already moving forward 
+TEST(DCMotDriverTestGroup, DCMotChangeDirReverseLeft){
+    mock().expectOneCall("GPIO_ReadOutputData").withParameter("Port", DC_CTRL_PORT);
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", DC_CTRL_PORT)
+                                          .withParameter("GPIO_Pin", DC_CTRL_PIN_LF);
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", DC_CTRL_PORT)
+                                        .withParameter("GPIO_Pin", DC_CTRL_PIN_LR);
+
+    motor_change_direction(DC_LEFT, DC_DIR_REVERSE);
+    mock().checkExpectations();
+}
+
+// Vehicle is already moving forward 
+TEST(DCMotDriverTestGroup, DCMotChangeDirForwardLeft){
+    mock().expectOneCall("GPIO_ReadOutputData").withParameter("Port", DC_CTRL_PORT);
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", DC_CTRL_PORT)
+                                        .withParameter("GPIO_Pin", DC_CTRL_PIN_LF);
+    motor_change_direction(DC_LEFT, DC_DIR_FORWARD);
+    mock().checkExpectations();
+}
+
+// Vehicle is already moving forward 
+TEST(DCMotDriverTestGroup, DCMotChangeDirReverseRight){
+    mock().expectOneCall("GPIO_ReadOutputData").withParameter("Port", DC_CTRL_PORT);
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", DC_CTRL_PORT)
+                                          .withParameter("GPIO_Pin", DC_CTRL_PIN_RF);
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", DC_CTRL_PORT)
+                                        .withParameter("GPIO_Pin", DC_CTRL_PIN_RR);
+
+    motor_change_direction(DC_RIGHT, DC_DIR_REVERSE);
+    mock().checkExpectations();
+}
+
+// Vehicle is already moving forward 
+TEST(DCMotDriverTestGroup, DCMotChangeDirForwardRight){
+    mock().expectOneCall("GPIO_ReadOutputData").withParameter("Port", DC_CTRL_PORT);
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", DC_CTRL_PORT)
+                                        .withParameter("GPIO_Pin", DC_CTRL_PIN_RF);
+    motor_change_direction(DC_RIGHT, DC_DIR_FORWARD);
+    mock().checkExpectations();
+}
+
+TEST(DCMotDriverTestGroup, DCMotChangeDirReverseBoth){
+    mock().expectOneCall("GPIO_ReadOutputData").withParameter("Port", DC_CTRL_PORT);
+    mock().expectOneCall("GPIO_ResetBits").withParameter("Port", DC_CTRL_PORT)
+                                          .withParameter("GPIO_Pin",
+                                                         DC_CTRL_PIN_LF | DC_CTRL_PIN_RF);
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", DC_CTRL_PORT)
+                                        .withParameter("GPIO_Pin",
+                                                       DC_CTRL_PIN_LR | DC_CTRL_PIN_RR);
+    motor_change_direction(DC_BOTH, DC_DIR_REVERSE);
+    mock().checkExpectations();
+}
+
+TEST(DCMotDriverTestGroup, DCMotChangeDirForwardBoth){
+    mock().expectOneCall("GPIO_ReadOutputData").withParameter("Port", DC_CTRL_PORT);
+    mock().expectOneCall("GPIO_SetBits").withParameter("Port", DC_CTRL_PORT)
+                                        .withParameter("GPIO_Pin",
+                                                       DC_CTRL_PIN_LF | DC_CTRL_PIN_RF);
+    motor_change_direction(DC_BOTH, DC_DIR_FORWARD);
+    mock().checkExpectations();
+}

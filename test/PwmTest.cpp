@@ -126,7 +126,7 @@ TEST(PwmDriverTestGroup, PWMSetPulseWidthRight100){
 
 TEST(PwmDriverTestGroup, PWMSetPulseWidthRightAny){
     mock().expectOneCall("TIM_SetCompare2").withParameter("Timer", PWM_TIMER)
-                                           .withParameter("CCR", 2519);
+                                           .withParameter("CCR", 402);
     pwm_set_duty_cycle(PWM_RIGHT, 30);
     mock().checkExpectations();
 }
@@ -140,7 +140,7 @@ TEST(PwmDriverTestGroup, PWMSetPulseWidthLeftZero){
 
 TEST(PwmDriverTestGroup, PWMSetPulseWidthRightAbove101){
     mock().expectOneCall("TIM_SetCompare2").withParameter("Timer", PWM_TIMER)
-                                           .withParameter("CCR", 8483);
+                                           .withParameter("CCR", 1356);
     pwm_set_duty_cycle(PWM_RIGHT, 255);
     mock().checkExpectations();
 }
@@ -158,7 +158,7 @@ TEST(PwmDriverTestGroup, PWMGetDutyCycleRightZero){
 TEST(PwmDriverTestGroup, PWMGetDutyCycleRight50){
     uint16_t duty_cycle;
     mock().expectOneCall("TIM_SetCompare2").withParameter("Timer", PWM_TIMER)
-                                           .withParameter("CCR", 4199);
+                                           .withParameter("CCR", 671);
     pwm_set_duty_cycle(PWM_RIGHT, 50);
     duty_cycle = pwm_get_duty_cycle(PWM_RIGHT);
     CHECK(duty_cycle == 50);
@@ -167,7 +167,7 @@ TEST(PwmDriverTestGroup, PWMGetDutyCycleRight50){
 TEST(PwmDriverTestGroup, PWMGetDutyCycleLeft50){
     uint16_t duty_cycle;
     mock().expectOneCall("TIM_SetCompare1").withParameter("Timer", PWM_TIMER)
-                                           .withParameter("CCR", 4199);
+                                           .withParameter("CCR", 671);
     pwm_set_duty_cycle(PWM_LEFT, 50);
     duty_cycle = pwm_get_duty_cycle(PWM_LEFT);
     CHECK(duty_cycle == 50);

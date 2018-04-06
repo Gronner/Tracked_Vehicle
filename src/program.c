@@ -3,9 +3,6 @@
 #include "task.h"
 #include "bsp.h"
 #include "led_driver.h"
-#include "i2c_driver.h"
-#include "lsm_driver.h"
-#include "lcd_driver.h"
 #include "pwm_driver.h"
 #include "motor_driver.h"
 
@@ -17,13 +14,14 @@ void Task2(void * pvParameters);
 
 int main(void){
     led_init();
-    lcd_init();
-    i2c_init();
-    lsm_init();
     // PWM init must always come after motor init!
     motor_init();
     pwm_init();
-
+    
+    // Start driving forward
+    motor_change_direction(DC_BOTH, DC_DIR_FORWARD);
+    pwm_set_duty_cycle(PWM_LEFT, 75);
+    pwm_set_duty_cycle(PWM_RIGHT, 75);
     create_tasks();
 
     vTaskStartScheduler();
@@ -44,14 +42,19 @@ void create_tasks(void){
 
 void Task1(void * pvParameters){
     TickType_t xLastWakeTime;
-    uint16_t acc_x_axis_data;
     xLastWakeTime = xTaskGetTickCount();
+    uint8_t i = 0;
     for(;;){
+        if(i == 10){
+            pwm_set_duty_cycle(PWM_LEFT, 0);
+            pwm_set_duty_cycle(PWM_RIGHT, 0);
+            motor_change_direction(DC_BOTH, DC_DIR_REVERSE);
+            pwm_set_duty_cycle(PWM_LEFT, 75);
+            pwm_set_duty_cycle(PWM_RIGHT, 75);
+        }
+        i++;
         led_toggle(LED_GREEN);
-        acc_x_axis_data = lsm_read_axis('z');
-        lcd_print_string("\tZ-Axis reads:\n", 15);
-        lcd_print_integer((uint32_t)acc_x_axis_data); 
-        vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(250));
+        vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(1000));
     }
 
     vTaskDelete(NULL);

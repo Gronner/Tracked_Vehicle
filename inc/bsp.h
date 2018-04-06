@@ -19,7 +19,7 @@
 #define PWM_TIMER TIM2
 #define PWM_PIN_AF GPIO_AF_TIM2
 #define PWM_PRESCALER 0
-#define PWM_PERIOD 8399
+#define PWM_PERIOD 1343
 #define PWM_CLK_DIV TIM_CKD_DIV1
 #define PWM_START_PULSE 0
 
@@ -53,7 +53,7 @@
 #define DC_CTRL_PORT GPIOD
 #define DC_CTRL_PIN_LF GPIO_Pin_0
 #define DC_CTRL_PIN_LR GPIO_Pin_1
-#define DC_CTRL_PIN_RF GPIO_Pin_2
-#define DC_CTRL_PIN_RR GPIO_Pin_3
+#define DC_CTRL_PIN_RR GPIO_Pin_2
+#define DC_CTRL_PIN_RF GPIO_Pin_3
 
 #endif // __BSP_H_

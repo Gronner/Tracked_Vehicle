@@ -64,3 +64,8 @@ void GPIO_Write(GPIO_TypeDef* GPIOx, uint16_t PortVal){
     mock().actualCall("GPIO_Write").withParameter("Port", GPIOx)
                                    .withParameter("Port_Value", PortVal);
 }
+
+uint16_t GPIO_ReadOutputData(GPIO_TypeDef* GPIOx){
+    mock().actualCall("GPIO_ReadOutputData").withParameter("Port", GPIOx);
+    return 0x9; // Both motors driving forward
+}
