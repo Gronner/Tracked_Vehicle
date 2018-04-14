@@ -67,5 +67,5 @@ void GPIO_Write(GPIO_TypeDef* GPIOx, uint16_t PortVal){
 
 uint16_t GPIO_ReadOutputData(GPIO_TypeDef* GPIOx){
     mock().actualCall("GPIO_ReadOutputData").withParameter("Port", GPIOx);
-    return 0x9; // Both motors driving forward
+    return 0x5000; // Both motors driving forward
 }

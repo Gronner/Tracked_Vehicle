@@ -5,7 +5,7 @@
 
 void motor_init(void){
     // Activate clock to GPIO peripheral
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
     
     // Configure control pins
     GPIO_InitTypeDef Ctrl_Init_Def;

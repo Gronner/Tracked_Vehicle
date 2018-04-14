@@ -38,7 +38,7 @@ TEST_GROUP(DCMotDriverTestGroup){
 TEST(DCMotDriverTestGroup, DCMotInitProperly){
     mock_c()->installComparator("GPIO_InitType", gpio_is_equal, gpio_to_string);
 
-    mock().expectOneCall("RCC_AHB1PeriphClockCmd").withParameter("HW_Clock", RCC_AHB1Periph_GPIOD)
+    mock().expectOneCall("RCC_AHB1PeriphClockCmd").withParameter("HW_Clock", RCC_AHB1Periph_GPIOB)
                                                   .withParameter("STATE", ENABLE);
     mock().expectOneCall("GPIO_Init").withParameter("Port", DC_CTRL_PORT)
                                      .withParameterOfType("GPIO_InitType",
