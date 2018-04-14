@@ -9,7 +9,16 @@
 #define DC_DIR_FORWARD 1
 #define DC_DIR_REVERSE 2
 
+/* @brief Initializes the control pins of the motor driver. */
 void motor_init(void);
+
+/* @brief Handles reversing the direction of the motors. Can also be used to 
+ * start driving in one direction.
+ * @param side Integer value specifying the side to be reversed. Can either be
+ * 1 - left, 2 - right, 3 - both.
+ * @param direction Integer value specifying the new direction of the motor. Can
+ * either be 1 - forward or 2 - reverse.
+ */
 void motor_change_direction(uint8_t side, uint8_t direction);
 
 #endif // __MOTOR_DRIVER_H
