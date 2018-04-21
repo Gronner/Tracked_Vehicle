@@ -43,18 +43,12 @@ void create_tasks(void){
 void Task1(void * pvParameters){
     TickType_t xLastWakeTime;
     xLastWakeTime = xTaskGetTickCount();
-    uint8_t i = 0;
+    float volt = 0.f;
     for(;;){
-        if(i == 10){
-            pwm_set_duty_cycle(PWM_LEFT, 0);
-            pwm_set_duty_cycle(PWM_RIGHT, 0);
-            motor_change_direction(DC_BOTH, DC_DIR_REVERSE);
-            pwm_set_duty_cycle(PWM_LEFT, 75);
-            pwm_set_duty_cycle(PWM_RIGHT, 75);
-        }
-        i++;
+        motor_set_drive_v(DC_BOTH, volt);
+        volt += 0.5f;
         led_toggle(LED_GREEN);
-        vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(1000));
+        vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(2000));
     }
 
     vTaskDelete(NULL);
