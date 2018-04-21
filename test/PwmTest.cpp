@@ -3,6 +3,7 @@
 #include "MockSupport_c.h"
 
 extern "C"{
+    #include <stdio.h>
     #include "stm32f4xx_conf.h"
     #include "stm32f4xx_rcc.h"
     #include "bsp.h"
@@ -120,14 +121,14 @@ TEST(PwmDriverTestGroup, PWMSetPulseWidthRightZero){
 TEST(PwmDriverTestGroup, PWMSetPulseWidthRight100){
     mock().expectOneCall("TIM_SetCompare2").withParameter("Timer", PWM_TIMER)
                                            .withParameter("CCR", PWM_PERIOD);
-    pwm_set_duty_cycle(PWM_RIGHT, 100);
+    pwm_set_duty_cycle(PWM_RIGHT, 1000);
     mock().checkExpectations();
 }
 
 TEST(PwmDriverTestGroup, PWMSetPulseWidthRightAny){
     mock().expectOneCall("TIM_SetCompare2").withParameter("Timer", PWM_TIMER)
                                            .withParameter("CCR", 402);
-    pwm_set_duty_cycle(PWM_RIGHT, 30);
+    pwm_set_duty_cycle(PWM_RIGHT, 300);
     mock().checkExpectations();
 }
 
@@ -141,7 +142,7 @@ TEST(PwmDriverTestGroup, PWMSetPulseWidthLeftZero){
 TEST(PwmDriverTestGroup, PWMSetPulseWidthRightAbove101){
     mock().expectOneCall("TIM_SetCompare2").withParameter("Timer", PWM_TIMER)
                                            .withParameter("CCR", 1356);
-    pwm_set_duty_cycle(PWM_RIGHT, 255);
+    pwm_set_duty_cycle(PWM_RIGHT, 2550);
     mock().checkExpectations();
 }
 
@@ -159,16 +160,18 @@ TEST(PwmDriverTestGroup, PWMGetDutyCycleRight50){
     uint16_t duty_cycle;
     mock().expectOneCall("TIM_SetCompare2").withParameter("Timer", PWM_TIMER)
                                            .withParameter("CCR", 671);
-    pwm_set_duty_cycle(PWM_RIGHT, 50);
+    pwm_set_duty_cycle(PWM_RIGHT, 500);
     duty_cycle = pwm_get_duty_cycle(PWM_RIGHT);
-    CHECK(duty_cycle == 50);
+    printf("%d", duty_cycle);
+    CHECK(duty_cycle == 500);
 }
 
 TEST(PwmDriverTestGroup, PWMGetDutyCycleLeft50){
     uint16_t duty_cycle;
     mock().expectOneCall("TIM_SetCompare1").withParameter("Timer", PWM_TIMER)
                                            .withParameter("CCR", 671);
-    pwm_set_duty_cycle(PWM_LEFT, 50);
+    pwm_set_duty_cycle(PWM_LEFT, 500);
     duty_cycle = pwm_get_duty_cycle(PWM_LEFT);
-    CHECK(duty_cycle == 50);
+    printf("%d", duty_cycle);
+    CHECK(duty_cycle == 500);
 }

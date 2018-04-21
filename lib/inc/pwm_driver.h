@@ -18,11 +18,11 @@ void pwm_start(void);
  * as selector.
  * @param duty_cycle New duty cycle in percentage. Possible values from 0% to 101%
  */
-void pwm_set_duty_cycle(uint16_t pwm_channel, uint8_t duty_cycle);
+void pwm_set_duty_cycle(uint16_t pwm_channel, uint16_t duty_cycle);
 
 /* @brief Get the duty cycle of one pwm channel.
  * @param pwm_channel Channel that should be queried. Uses the pin bitmask as 
  * selector.
  */
-uint8_t pwm_get_duty_cycle(uint16_t pwm_channel);
+uint16_t pwm_get_duty_cycle(uint16_t pwm_channel);
 #endif // __PWD_DRIVER_H_
