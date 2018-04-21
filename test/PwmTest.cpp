@@ -3,7 +3,6 @@
 #include "MockSupport_c.h"
 
 extern "C"{
-    #include <stdio.h>
     #include "stm32f4xx_conf.h"
     #include "stm32f4xx_rcc.h"
     #include "bsp.h"
@@ -162,7 +161,6 @@ TEST(PwmDriverTestGroup, PWMGetDutyCycleRight50){
                                            .withParameter("CCR", 671);
     pwm_set_duty_cycle(PWM_RIGHT, 500);
     duty_cycle = pwm_get_duty_cycle(PWM_RIGHT);
-    printf("%d", duty_cycle);
     CHECK(duty_cycle == 500);
 }
 
@@ -172,6 +170,5 @@ TEST(PwmDriverTestGroup, PWMGetDutyCycleLeft50){
                                            .withParameter("CCR", 671);
     pwm_set_duty_cycle(PWM_LEFT, 500);
     duty_cycle = pwm_get_duty_cycle(PWM_LEFT);
-    printf("%d", duty_cycle);
     CHECK(duty_cycle == 500);
 }
