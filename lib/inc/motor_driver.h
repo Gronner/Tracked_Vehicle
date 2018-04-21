@@ -21,4 +21,12 @@ void motor_init(void);
  */
 void motor_change_direction(uint8_t side, uint8_t direction);
 
+/* @brief Changes the voltage supplied to the motors. Controls the PWM module
+ * @param side Integer value specifying the side that is controlled. Can either
+ * be 1- left, 2 - right, 3 - both.
+ * @param Voltage supplied to the motors. Values below 2V won't result in 
+ * motor movement.
+ */
+void motor_set_drive_v(uint8_t side, float voltage);
+
 #endif // __MOTOR_DRIVER_H

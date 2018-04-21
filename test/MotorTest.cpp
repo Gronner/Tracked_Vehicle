@@ -112,3 +112,47 @@ TEST(DCMotDriverTestGroup, DCMotChangeDirForwardBoth){
     motor_change_direction(DC_BOTH, DC_DIR_FORWARD);
     mock().checkExpectations();
 }
+
+TEST(DCMotDriverTestGroup, DCMotSetDriveVoltageZero){
+    mock().expectOneCall("TIM_SetCompare1").withParameter("Timer", PWM_TIMER)
+                                           .withParameter("CCR", 0);
+    mock().expectOneCall("TIM_SetCompare2").withParameter("Timer", PWM_TIMER)
+                                           .withParameter("CCR", 0);
+    motor_set_drive_v(DC_BOTH, 0.f);
+    mock().checkExpectations();
+}
+
+TEST(DCMotDriverTestGroup, DCMotSetDriveVoltageZeroLeft){
+    mock().expectOneCall("TIM_SetCompare1").withParameter("Timer", PWM_TIMER)
+                                           .withParameter("CCR", 0);
+    motor_set_drive_v(DC_LEFT, 0.f);
+    mock().checkExpectations();
+}
+
+TEST(DCMotDriverTestGroup, DCMotSetDriveVoltageZeroRight){
+    mock().expectOneCall("TIM_SetCompare2").withParameter("Timer", PWM_TIMER)
+                                           .withParameter("CCR", 0);
+    motor_set_drive_v(DC_RIGHT, 0.f);
+    mock().checkExpectations();
+}
+
+TEST(DCMotDriverTestGroup, DCMotSetDriveVoltage2_55V){
+    mock().expectOneCall("TIM_SetCompare1").withParameter("Timer", PWM_TIMER)
+                                           .withParameter("CCR", 872);
+    mock().expectOneCall("TIM_SetCompare2").withParameter("Timer", PWM_TIMER)
+                                           .withParameter("CCR", 872);
+
+    motor_set_drive_v(DC_BOTH, 2.55);
+    mock().checkExpectations();
+}
+
+TEST(DCMotDriverTestGroup, DCMotSetDriveVoltage10_5V){
+    mock().expectOneCall("TIM_SetCompare1").withParameter("Timer", PWM_TIMER)
+                                           .withParameter("CCR", PWM_PERIOD);
+    mock().expectOneCall("TIM_SetCompare2").withParameter("Timer", PWM_TIMER)
+                                           .withParameter("CCR", PWM_PERIOD);
+
+    motor_set_drive_v(DC_BOTH, 10.5);
+    mock().checkExpectations();
+}
+

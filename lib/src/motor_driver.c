@@ -1,7 +1,9 @@
 #include "motor_driver.h"
-#include "bsp.h"
 #include "stm32f4xx_rcc.h"
 #include "stm32f4xx_gpio.h"
+#include "bsp.h"
+#include "pwm_driver.h"
+
 
 void motor_init(void){
     // Activate clock to GPIO peripheral
@@ -63,4 +65,24 @@ void motor_change_direction(uint8_t side, uint8_t direction){
     }
     GPIO_SetBits(DC_CTRL_PORT, new_active_pin);
 
+}
+
+void motor_set_drive_v(uint8_t side, float voltage){
+    uint16_t duty_cycle;
+    if(!(voltage == 0.f)){
+        duty_cycle = (uint16_t) (44.025f * voltage + 537.7375f);
+    }
+    else{
+        duty_cycle = 0;
+    }
+    if(side == DC_LEFT){
+        pwm_set_duty_cycle(PWM_LEFT, duty_cycle);
+    }
+    if(side == DC_RIGHT){
+        pwm_set_duty_cycle(PWM_RIGHT, duty_cycle);
+    }
+    if(side == DC_BOTH){
+        pwm_set_duty_cycle(PWM_LEFT, duty_cycle);
+        pwm_set_duty_cycle(PWM_RIGHT, duty_cycle);
+    }
 }
