@@ -8,7 +8,7 @@ extern "C"{
 int adc_is_equal(const void* object1, const void* object2);
 const char* adc_to_string(const void* object);
 
-void ADC_Init(GPIO_TypeDef* Port, GPIO_InitTypeDef* Pin_Init_Struct);
+void ADC_Init(ADC_TypeDef* Port, ADC_InitTypeDef* Pin_Init_Struct);
 void ADC_RegularChannelConfig(ADC_TypeDef* ADCx, uint8_t ADC_Channel, uint8_t Rank, uint8_t ADC_SampleTime);
 void ADC_Cmd(ADC_TypeDef* ADCx, FunctionalState NewState);
 #endif // __TEST_GPIO_MOCK_H_

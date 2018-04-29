@@ -11,3 +11,8 @@ void RCC_APB1PeriphClockCmd(uint32_t HW_Clock, FunctionalState State){
     mock().actualCall("RCC_APB1PeriphClockCmd").withParameter("HW_Clock", HW_Clock)
                                                               .withParameter("STATE", State);
 }
+
+void RCC_APB2PeriphClockCmd(uint32_t HW_Clock, FunctionalState State){
+    mock().actualCall("RCC_APB2PeriphClockCmd").withParameter("HW_Clock", HW_Clock)
+                                                              .withParameter("STATE", State);
+}
