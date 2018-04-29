@@ -2,6 +2,7 @@
 #define __BSP_H_
 #include "stm32f4xx_gpio.h"
 #include "stm32f4xx_tim.h"
+#include "stm32f4xx_adc.h"
 
 // LEDs
 #define LED_PORT GPIOD
@@ -56,4 +57,11 @@
 #define DC_CTRL_PIN_RF GPIO_Pin_14
 #define DC_CTRL_PIN_RR GPIO_Pin_15
 
+// ADC
+#define ADC_PORT GPIOB
+#define ADC_LEFT_MOTOR GPIO_Pin_0
+#define ADC_RIGHT_MOTOR GPIO_Pin_1
+#define ADC_LEFT_CHANNEL ADC_Channel_8
+#define ADC_RIGHT_CHANNEL ADC_Channel_9
+#define ADC_NUMBER_OF_CONV 2
 #endif // __BSP_H_
