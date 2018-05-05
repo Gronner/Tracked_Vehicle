@@ -55,3 +55,4 @@ dkms.conf
 build/release/*
 build/test/*
 build/debug/*
+tags

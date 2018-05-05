@@ -44,16 +44,16 @@ void lcd_init(void){
     // Write 8-bit command 3 times
     uint8_t i;
     for(i = 0; i < 3; i++){
-        write_nibble(LCD_8b);
+        write_nibble(LCD_CMD_8b);
     }
     // Write 4-bit command
-    write_nibble(LCD_4b);
+    write_nibble(LCD_CMD_4b);
     // Write display mode command TODO: Replace later on with write command
-    lcd_write_cmd(LCD_DM);
+    lcd_write_cmd(LCD_CMD_DM);
     // Send active display command
-    lcd_write_cmd(LCD_ACT);
+    lcd_write_cmd(LCD_CMD_ACT);
     // Clear LCD
-    lcd_write_cmd(LCD_CLR);
+    lcd_write_cmd(LCD_CMD_CLR);
 
     cursor_pos = 0x00; // Cursor in first row, first column
 }
@@ -120,7 +120,7 @@ void lcd_cursor_put(uint8_t row, uint8_t column){
 }
 
 void lcd_clear(void){
-    lcd_write_cmd(LCD_CLR);
+    lcd_write_cmd(LCD_CMD_CLR);
     lcd_cursor_put(0, 0);
 }
 

@@ -74,10 +74,10 @@ TEST(LcdDriverTestGroup, InitLcdProperly){
                                         .withParameter("GPIO_Pin", LCD_EN);
     // Send 8-bit mode 3 times
     for(uint8_t i = 0;i < 3; i++){
-        mock_nibble_write(LCD_8b);
+        mock_nibble_write(LCD_CMD_8b);
     }
     // Send 4-bit mode command
-    mock_nibble_write(LCD_4b);
+    mock_nibble_write(LCD_CMD_4b);
     // Send display mode command
     mock().expectOneCall("GPIO_ResetBits").withParameter("Port", LCD_PORT)
                                           .withParameter("GPIO_Pin", LCD_RS);
@@ -110,7 +110,7 @@ TEST(LcdDriverTestGroup, LcdSendCommandOneNibble){
                                           .withParameter("GPIO_Pin", LCD_RS);
     mock_nibble_write(0x0);
     mock_nibble_write(0xF);
-    lcd_write_cmd(LCD_ACT);
+    lcd_write_cmd(LCD_CMD_ACT);
     mock().checkExpectations();
 }
 
@@ -121,7 +121,7 @@ TEST(LcdDriverTestGroup, LcdSendCommandTwoNibble){
     mock_nibble_write(0x2);
     mock_nibble_write(0x8);
 
-    lcd_write_cmd(LCD_DM);
+    lcd_write_cmd(LCD_CMD_DM);
     mock().checkExpectations();
 }
 
