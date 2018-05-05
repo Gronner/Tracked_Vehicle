@@ -110,3 +110,35 @@ TEST(AdcDriverTestGroup, ADCSampleOnce){
     CHECK(data[0] == 2048);
     CHECK(data[1] == 2048);
 }
+
+TEST(AdcDriverTestGroup, ADCConvertToVoltageBothSame){
+    uint16_t data_in[2] = {2048, 2048};
+    float data_out[2] = {0.f, 0.f};
+    adc_convert_sample(data_in, data_out);
+    DOUBLES_EQUAL(1.798f, data_out[0], .001);
+    DOUBLES_EQUAL(1.798f, data_out[1], .001);
+}
+
+TEST(AdcDriverTestGroup, ADCConvertToVoltageBothDifferent){
+    uint16_t data_in[2] = {1024, 3072};
+    float data_out[2] = {0.f, 0.f};
+    adc_convert_sample(data_in, data_out);
+    DOUBLES_EQUAL(0.899f, data_out[0], .001);
+    DOUBLES_EQUAL(2.697f, data_out[1], .001);
+}
+
+TEST(AdcDriverTestGroup, ADCConvertToVoltageZero){
+    uint16_t data_in[2] = {0, 0};
+    float data_out[2] = {0.f, 0.f};
+    adc_convert_sample(data_in, data_out);
+    DOUBLES_EQUAL(0.f, data_out[0], .001);
+    DOUBLES_EQUAL(0.f, data_out[1], .001);
+}
+
+TEST(AdcDriverTestGroup, ADCConvertToVoltageMax){
+    uint16_t data_in[2] = {4096, 4096};
+    float data_out[2] = {0.f, 0.f};
+    adc_convert_sample(data_in, data_out);
+    DOUBLES_EQUAL(3.596f, data_out[0], .001);
+    DOUBLES_EQUAL(3.596f, data_out[1], .001);
+}

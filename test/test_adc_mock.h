@@ -15,5 +15,5 @@ void ADC_Cmd(ADC_TypeDef* ADCx, FunctionalState NewState);
 void ADC_SoftwareStartConv(ADC_TypeDef* ADCx);
 FlagStatus ADC_GetFlagStatus(ADC_TypeDef* ADCx, uint8_t ADC_FLAG);
 uint16_t ADC_GetConversionValue(ADC_TypeDef* ADCx);
-void ADC_ClearFlag(ADC_TypeDef* ADC, uint8_t ADC_FLAG);
+void ADC_ClearFlag(ADC_TypeDef* ADCx, uint8_t ADC_FLAG);
 #endif // __TEST_GPIO_MOCK_H_

@@ -51,3 +51,12 @@ void adc_sample(uint16_t data[]){
     data[1] = ADC_GetConversionValue(ADC1);
     ADC_ClearFlag(ADC1, ADC_FLAG_EOC);
 }
+
+static float convert_to_volt(uint16_t adc_value){
+    return adc_value * ADC_CONV_FACTOR;
+}
+
+void adc_convert_sample(uint16_t data_in[], float data_out[]){
+    data_out[0] = convert_to_volt(data_in[0]);
+    data_out[1] = convert_to_volt(data_in[1]);
+}

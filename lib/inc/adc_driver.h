@@ -7,4 +7,5 @@ void adc_init(void);
  * @param data Array for storing the channels samples
  */
 void adc_sample(uint16_t data[]);
+void adc_convert_sample(uint16_t data_in[], float data_out[]);
 #endif // __ADC_DRIVER_H_

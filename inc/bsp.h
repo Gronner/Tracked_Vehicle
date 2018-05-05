@@ -72,5 +72,6 @@
 #define ADC_LEFT_CHANNEL ADC_Channel_8 
 #define ADC_RIGHT_CHANNEL ADC_Channel_9 
 #define ADC_NUMBER_OF_CONV 2 
+#define ADC_CONV_FACTOR 0.000878f 
 
 #endif //__BSP_INCLUDED__
