@@ -39,3 +39,15 @@ void adc_init(void){
     ADC_Cmd(ADC1, ENABLE);
 
 }
+
+void adc_sample(uint16_t data[]){
+    ADC_SoftwareStartConv(ADC1);
+
+    while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC));
+    data[0] = ADC_GetConversionValue(ADC1);
+    ADC_ClearFlag(ADC1, ADC_FLAG_EOC);
+
+    while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC));
+    data[1] = ADC_GetConversionValue(ADC1);
+    ADC_ClearFlag(ADC1, ADC_FLAG_EOC);
+}

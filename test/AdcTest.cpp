@@ -83,3 +83,30 @@ TEST(AdcDriverTestGroup, ADCInitProperly){
     adc_init();
     mock().checkExpectations();
 }
+
+TEST(AdcDriverTestGroup, ADCSampleOnce){
+    // Start conversion
+    mock().expectOneCall("ADC_SoftwareStartConv").withParameter("ADC", ADC1);
+    // Wait for conversion to finish
+    mock().expectOneCall("ADC_GetFlagStatus").withParameter("ADC", ADC1)
+                                             .withParameter("Flag", ADC_FLAG_EOC);
+    // Get first Value
+    mock().expectOneCall("ADC_GetConversionValue").withParameter("ADC", ADC1);
+    // Clear EOC flag
+    mock().expectOneCall("ADC_ClearFlag").withParameter("ADC", ADC1)
+                                         .withParameter("Flag", ADC_FLAG_EOC);
+    // Wait for second conversion to finish
+    mock().expectOneCall("ADC_GetFlagStatus").withParameter("ADC", ADC1)
+                                             .withParameter("Flag", ADC_FLAG_EOC);
+    // Get second Value
+    mock().expectOneCall("ADC_GetConversionValue").withParameter("ADC", ADC1);
+    // Clear EOC flag
+    mock().expectOneCall("ADC_ClearFlag").withParameter("ADC", ADC1)
+                                         .withParameter("Flag", ADC_FLAG_EOC);
+
+    uint16_t data[2] = {0, 0};
+    adc_sample(data);
+    mock().checkExpectations();
+    CHECK(data[0] == 2048);
+    CHECK(data[1] == 2048);
+}
