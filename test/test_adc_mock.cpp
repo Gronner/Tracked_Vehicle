@@ -70,3 +70,23 @@ void ADC_Cmd(ADC_TypeDef* ADCx, FunctionalState NewState){
     mock().actualCall("ADC_Cmd").withParameter("ADC", ADCx)
                                 .withParameter("STATE", NewState);
 }
+
+void ADC_SoftwareStartConv(ADC_TypeDef* ADCx){
+    mock().actualCall("ADC_SoftwareStartConv").withParameter("ADC", ADCx);
+}
+
+FlagStatus ADC_GetFlagStatus(ADC_TypeDef* ADCx, uint8_t ADC_FLAG){
+    mock().actualCall("ADC_GetFlagStatus").withParameter("ADC", ADCx)
+                                          .withParameter("Flag", ADC_FLAG);
+    return SET;
+}
+
+uint16_t ADC_GetConversionValue(ADC_TypeDef* ADCx){
+    mock().actualCall("ADC_GetConversionValue").withParameter("ADC", ADCx);
+    return 2048;
+}
+
+void ADC_ClearFlag(ADC_TypeDef* ADCx, uint8_t ADC_FLAG){
+    mock().actualCall("ADC_ClearFlag").withParameter("ADC", ADCx)
+                                      .withParameter("Flag", ADC_FLAG);
+}
