@@ -11,4 +11,5 @@ typedef struct {
 } circ_buffer_t;
 
 void circ_buffer_reset(circ_buffer_t* buffer);
+void circ_buffer_add_value(circ_buffer_t* buffer, uint16_t value);
 #endif // __CIRC_BUFFER_H
