@@ -12,6 +12,12 @@ void circ_buffer_reset(circ_buffer_t* buffer){
 void circ_buffer_add_value(circ_buffer_t* buffer, uint16_t value){
     buffer->memory[buffer->head] = value;
     buffer->head++;
+    if(buffer->head == buffer->tail){
+        buffer->tail++;
+        if(!(buffer->tail < BUFFER_SIZE)){
+            buffer->tail = 0;
+        }
+    }
     if(!(buffer->head < BUFFER_SIZE)){
         buffer->head = 0;
     }

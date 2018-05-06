@@ -93,6 +93,16 @@ TEST(CircularBufferTestGroup, CircularBufferAddValuesOverfill){
     }
 }
 
+TEST(CircularBufferTestGroup, CircularBufferAddValueOverTail){
+    circ_buffer_reset(&buffer); // Reset for clean state
+    buffer.head = 7;
+    buffer.tail = 8;
+    circ_buffer_add_value(&buffer, 1);
+    CHECK_EQUAL_TEXT(8, buffer.head, "Head at wrong position");
+    CHECK_EQUAL_TEXT(9, buffer.tail, "Tail at wrong position");
+
+}
+
 TEST(CircularBufferTestGroup, CircularBufferReadFirstValue){
     circ_buffer_reset(&buffer); // Reset for clean state
     // Fill with readable values
