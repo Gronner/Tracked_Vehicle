@@ -69,6 +69,7 @@ SRCS += $(STM_COMMON)/Libraries/CMSIS/ST/STM32F4xx/Source/Templates/TrueSTUDIO/s
 SRCS_TEST_CPP = $(wildcard $(TESTDIR)/*.cpp)
 SRCS_TEST_C = $(LIBDIR)/src/led_driver.c $(LIBDIR)/src/pwm_driver.c $(LIBDIR)/src/i2c_driver.c $(LIBDIR)/src/lcd_driver.c 
 SRCS_TEST_C += $(LIBDIR)/src/lsm_driver.c $(LIBDIR)/src/motor_driver.c  $(LIBDIR)/src/adc_driver.c
+SRCS_TEST_C += $(LIBDIR)/src/circular_buffer.c
 OBJS_TEST = $(patsubst $(LIBDIR)/src/%.c, $(BUILDDIR)/test/%.o, $(SRCS_TEST_C))
 #SRCS_TEST_ARM_C += $(SRCDIR)/system_stm32f4xx.c
 #OBJS_TEST_ARM += $(BUILDDIR)/test/system_stm32f4xx.o
