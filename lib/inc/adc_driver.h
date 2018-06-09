@@ -1,5 +1,7 @@
 #ifndef __ADC_DRIVER_H_
 #define __ADC_DRIVER_H_
+#include <stdint.h>
+
 /* @brief Initializes the pins, the ADC peripheral and two Channels */
 void adc_init(void);
 

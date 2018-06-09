@@ -1,6 +1,8 @@
 #ifndef __LED_DRIVER_H_
 #define __LED_DRIVER_H_
 
+#include <stdint.h>
+
 /* @brief Initialize Port D, so the four on board LEDs can be interacted with.
  * Their initial state is off.
  */
