@@ -8,4 +8,4 @@ void adc_init(void);
  */
 void adc_sample(uint16_t data[]);
 void adc_convert_sample(uint16_t data_in[], float data_out[]);
-#endif // __ADC_DRIVER_H_
+#endif  // __ADC_DRIVER_H_

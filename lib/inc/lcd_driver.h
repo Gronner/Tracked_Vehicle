@@ -2,8 +2,9 @@
 #define __LCD_DRIVER_H_
 #include <stdint.h>
 
-/* @brief Initialize the pins 6 to 11 on port D to write to an Hitachy 
- * HD44780U LCD driver. The communication runs in 4-bit mode with a 2x16 dispaly.
+/* @brief Initialize the pins 6 to 11 on port D to write to an Hitachy
+ * HD44780U LCD driver. The communication runs in 4-bit mode with a 2x16
+ * dispaly.
  */
 void lcd_init(void);
 
@@ -18,7 +19,7 @@ void lcd_write_cmd(uint8_t cmd);
  */
 void lcd_write_char(char c);
 
-/* @brief Places the cursor on the LCD. If the value is outside of the allowed 
+/* @brief Places the cursor on the LCD. If the value is outside of the allowed
  * range it gets placed at the beginning of the next row.
  * @param row Selects the row the cursor should be placed in. Is either 0 or 1.
  * @param column Selects the column the cursor should be placed inn. Is between
@@ -46,4 +47,4 @@ void lcd_print_string(char* _string, uint8_t str_len);
  */
 void lcd_print_integer(int32_t number);
 
-#endif // __LCD_DRIVER_H_
+#endif  // __LCD_DRIVER_H_

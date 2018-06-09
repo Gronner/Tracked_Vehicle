@@ -2,7 +2,7 @@
 #define __I2C_DRIVER_H_
 #include <stdint.h>
 
-/* @brief Initializes the I2C1 peripheral in a configuration, so it can 
+/* @brief Initializes the I2C1 peripheral in a configuration, so it can
  * communicate with the LSM303DLHC device.
  */
 void i2c_init(void);
@@ -16,7 +16,8 @@ void i2c_init(void);
  * supports a single byte of data.
  * @param buffer_len Length of the data array.
  */
-void i2c_write(uint8_t address, uint8_t subaddress, uint8_t* data_buffer, uint8_t buffer_len);
+void i2c_write(uint8_t address, uint8_t subaddress, uint8_t* data_buffer,
+               uint8_t buffer_len);
 
 /* @brief Reads one byte of data from a device on the I2C1 bus.
  * @param address Address of the slave device.
@@ -26,6 +27,7 @@ void i2c_write(uint8_t address, uint8_t subaddress, uint8_t* data_buffer, uint8_
  * supports a single byte of data.
  * @param buffer_len Length of the data array.
  */
-void i2c_read(uint8_t address, uint8_t subaddress, uint8_t* data_buffer, uint8_t buffer_len);
+void i2c_read(uint8_t address, uint8_t subaddress, uint8_t* data_buffer,
+              uint8_t buffer_len);
 
-#endif // __I2C_DRIVER_H_
+#endif  // __I2C_DRIVER_H_

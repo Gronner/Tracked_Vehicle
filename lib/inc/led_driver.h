@@ -7,7 +7,7 @@
 uint8_t led_init(void);
 
 /* @brief Turn on one or more of the on board LEDs.
- * @param led Takes the bitmask of the LED's pin. Multiple pins can be passed 
+ * @param led Takes the bitmask of the LED's pin. Multiple pins can be passed
  * using the or Operator |
  */
 uint8_t led_turn_on(uint16_t led);
@@ -36,4 +36,4 @@ uint8_t led_turn_off_all(void);
  * Pin12 and so on.
  */
 uint8_t led_get_state(void);
-#endif // __LED_DRIVER_H_
+#endif  // __LED_DRIVER_H_
