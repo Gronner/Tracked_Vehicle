@@ -19,12 +19,13 @@
 #define LSM_ACC_Z_L_SADR 0x2C  // Z-axis lower
 #define LSM_ACC_Z_H_SADR 0x2D  // Z-axis high
 // ---- Register value definitions ---- //
-#define LSM_ACC_50HZ 0x04      // Set data rate to 50Hz
-#define LSM_ACC_X_EN 0x20      // Enable X axis
-#define LSM_ACC_Y_EN 0x40      // Enable Y axis
-#define LSM_ACC_Z_EN 0x80      // Enable Y axis
-#define LSM_ACC_ALL_AX_EN 0xE  // Enable all axes
-#define LSM_ACC_4G 0x08        // Use 4g as full-scale
+#define LSM_ACC_50HZ 0x40      // Set data rate to 50Hz
+#define LSM_ACC_X_EN 0x01      // Enable X axis
+#define LSM_ACC_Y_EN 0x02      // Enable Y axis
+#define LSM_ACC_Z_EN 0x04      // Enable Y axis
+#define LSM_ACC_ALL_AX_EN 0x07  // Enable all axes
+#define LSM_ACC_2G 0x00        // Use 4g as full-scale
+#define LSM_ACC_4G 0x10        // Use 4g as full-scale
 
 /* @brief Initializes the LSM303DLHC in 50Hz mode and enables all three
  * accelerometer axes.
