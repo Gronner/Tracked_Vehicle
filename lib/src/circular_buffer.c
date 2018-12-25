@@ -17,7 +17,7 @@ static uint8_t tail_update(circ_buffer_t* buffer) {
 }
 
 static void head_update(circ_buffer_t* buffer) {
-    buffer->head= increment(buffer->head);
+    buffer->head = increment(buffer->head);
     if(buffer->head == buffer->tail) {
         buffer->tail = increment(buffer->tail);
     }

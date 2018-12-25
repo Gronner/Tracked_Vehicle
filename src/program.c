@@ -14,23 +14,22 @@ void Task1(void* pvParameters);
 void Task2(void* pvParameters);
 
 int main(void) {
-  led_init();
-  // PWM init must always come after motor init!
-  motor_init();
-  pwm_init();
+    led_init();
+    // PWM init must always come after motor init!
+    motor_init();
+    pwm_init();
 
-  // Start driving forward
-  motor_change_direction(DC_BOTH, DC_DIR_FORWARD);
-  pwm_set_duty_cycle(PWM_LEFT, 75);
-  pwm_set_duty_cycle(PWM_RIGHT, 75);
-  create_tasks();
+    // Start driving forward
+    motor_change_direction(DC_BOTH, DC_DIR_FORWARD);
+    pwm_set_duty_cycle(PWM_LEFT, 75);
+    pwm_set_duty_cycle(PWM_RIGHT, 75);
+    create_tasks();
 
-  vTaskStartScheduler();
+    vTaskStartScheduler();
 
-  for (;;)
-    ;
+    for (;;);
 
-  return 0;
+    return 0;
 }
 
 void create_tasks(void) { xTaskCreate(Task1, "Task1", 100, NULL, 2, NULL); }
@@ -65,7 +64,7 @@ void Task2(void* pvParameters) {
       led_turn_on(LED_RED);
     }
     vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(250));
-  }
+   }
 
   vTaskDelete(NULL);
 }

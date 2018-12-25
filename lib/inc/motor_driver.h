@@ -9,10 +9,10 @@
 #define DC_DIR_FORWARD 1
 #define DC_DIR_REVERSE 2
 
-/* @brief Initializes the control pins of the motor driver. */
+/*! @brief Initializes the control pins of the motor driver. */
 void motor_init(void);
 
-/* @brief Handles reversing the direction of the motors. Can also be used to
+/*! @brief Handles reversing the direction of the motors. Can also be used to
  * start driving in one direction.
  * @param side Integer value specifying the side to be reversed. Can either be
  * 1 - left, 2 - right, 3 - both.
@@ -21,7 +21,7 @@ void motor_init(void);
  */
 void motor_change_direction(uint8_t side, uint8_t direction);
 
-/* @brief Changes the voltage supplied to the motors. Controls the PWM module
+/*! @brief Changes the voltage supplied to the motors. Controls the PWM module
  * @param side Integer value specifying the side that is controlled. Can either
  * be 1- left, 2 - right, 3 - both.
  * @param Voltage supplied to the motors. Values below 2V won't result in

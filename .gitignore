@@ -56,3 +56,5 @@ build/release/*
 build/test/*
 build/debug/*
 tags
+doc/html
+doc/latex

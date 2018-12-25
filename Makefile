@@ -123,3 +123,6 @@ $(BUILDDIR)/test/$(PROJ_NAME): $(OBJS_TEST_ARM) $(OBJS_TEST) $(SRCS_TEST_CPP)
 
 run_test:
 	$(BUILDDIR)/test/$(PROJ_NAME)
+
+doxygen:
+	doxygen ./doc/dox.config

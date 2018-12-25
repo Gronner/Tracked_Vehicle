@@ -27,13 +27,14 @@
 #define LSM_ACC_2G 0x00        // Use 4g as full-scale
 #define LSM_ACC_4G 0x10        // Use 4g as full-scale
 
-/* @brief Initializes the LSM303DLHC in 50Hz mode and enables all three
+/*! @brief Initializes the LSM303DLHC in 50Hz mode and enables all three
  * accelerometer axes.
  */
 void lsm_init(void);
-/* @brief Reads out upper and lower byte of the accelerometer's value in one
+/*! @brief Reads out upper and lower byte of the accelerometer's value in one
  * axis.
  * @param axis Char specifying the axis. Is either 'x', 'y' or 'z'.
+ * @returns 16-bit value of the axis specified.
  */
 uint16_t lsm_read_axis(char axis);
 #endif  // __LSM_DRIVER_H_
